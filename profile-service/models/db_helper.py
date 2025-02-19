@@ -25,7 +25,7 @@ class DatabaseHelper:
             pool_size=pool_size,
         )
 
-        self.sesssion_factory = async_sessionmaker(
+        self.session_factory = async_sessionmaker(
             bind=self.engine,
             autoflush=False,
             autocommit=False,
@@ -36,7 +36,7 @@ class DatabaseHelper:
         await self.engine.dispose()
 
     async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
-        async with self.sesssion_factory() as session:
+        async with self.session_factory() as session:
             yield session
 
 
