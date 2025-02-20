@@ -19,7 +19,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(
     profile_router,
-    prefix=settings.api.prefix,
 )
 
 
