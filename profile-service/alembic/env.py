@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from alembic import context
 from core.config import settings
 from models.base import Base
+from models.user import User  # need to correct Base import
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
