@@ -13,7 +13,6 @@ from .base import Base
 class Profile(Base):
     __tablename__ = "profiles"
 
-    username: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
     geo_latitude: Mapped[float] = mapped_column(Float, nullable=False)
