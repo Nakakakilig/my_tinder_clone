@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, Float, String, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from .photo import Photo
-    from .preference import Preference
+    from .user import User
 
 from .base import Base
 
@@ -13,6 +12,9 @@ from .base import Base
 class Profile(Base):
     __tablename__ = "profiles"
 
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id"), index=True, unique=True
+    )
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
     geo_latitude: Mapped[float] = mapped_column(Float, nullable=False)
@@ -22,5 +24,4 @@ class Profile(Base):
         DateTime, server_default=func.now(), onupdate=func.now()
     )
 
-    preferences: Mapped["Preference"] = relationship(back_populates="profile")
-    photos: Mapped["Photo"] = relationship(back_populates="profile")
+    user: Mapped["User"] = relationship(back_populates="profile")

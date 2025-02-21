@@ -4,16 +4,15 @@ from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from .profile import Profile
+    from .user import User
 
 from .base import Base
-from .profile import Profile
 
 
 class Photo(Base):
     __tablename__ = "photos"
 
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("profiles.id"), index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
     url: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    profile: Mapped["Profile"] = relationship(back_populates="photos")
+    user: Mapped["User"] = relationship(back_populates="photos")
