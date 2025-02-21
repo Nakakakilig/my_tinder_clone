@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from api import router as profile_router
+from api.main import router as profile_router
 from core.config import settings
 from core.models.db_helper import db_helper
 from fastapi import FastAPI
