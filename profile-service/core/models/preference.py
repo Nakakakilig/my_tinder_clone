@@ -1,8 +1,14 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from .profile import Profile
 
 from .base import Base
 from .enums import Gender
+from .profile import Profile
 
 
 class Preference(Base):
@@ -16,3 +22,5 @@ class Preference(Base):
     updated_at: Mapped[DateTime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=func.now()
     )
+
+    profile: Mapped["Profile"] = relationship(back_populates="preferences")
