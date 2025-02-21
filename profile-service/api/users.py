@@ -1,17 +1,14 @@
-from typing import Annotated
-
-from core.models import db_helper
 from core.schemas.user import UserCreate, UserRead
 from crud import users as users_crud
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter
+from api.deps import db_dependency
 
 router = APIRouter(tags=["users"])
 
 
 @router.get("/", response_model=list[UserRead])
 async def get_users(
-    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    session: db_dependency,
 ):
     users = await users_crud.get_all_users(session=session)
     return users
@@ -19,7 +16,7 @@ async def get_users(
 
 @router.post("/", response_model=UserRead)
 async def create_user(
-    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    session: db_dependency,
     user_create: UserCreate,
 ) -> UserRead:
     user = await users_crud.create_user(
