@@ -11,7 +11,6 @@ from .profile import Profile
 
 
 class Photo(Base):
-
     __tablename__ = "photos"
 
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("profiles.id"), index=True)

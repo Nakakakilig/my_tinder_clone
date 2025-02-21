@@ -11,7 +11,6 @@ from .base import Base
 
 
 class Profile(Base):
-
     __tablename__ = "profiles"
 
     username: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)

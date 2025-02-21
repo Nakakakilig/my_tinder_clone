@@ -3,7 +3,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
-
     metadata = MetaData(
         naming_convention={
             "ix": "ix_%(column_0_label)s",

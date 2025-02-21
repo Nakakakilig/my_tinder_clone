@@ -12,10 +12,11 @@ from .profile import Profile
 
 
 class Preference(Base):
-
     __tablename__ = "preferences"
 
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("profiles.id"), index=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("profiles.id"), index=True, unique=True
+    )
     gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
     age: Mapped[int] = mapped_column(Integer, nullable=False)
     radius: Mapped[int] = mapped_column(Integer, nullable=False)
