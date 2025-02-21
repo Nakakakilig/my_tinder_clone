@@ -5,6 +5,7 @@ __all__ = (
     "Profile",
     "Preference",
     "Photo",
+    "User",
 )
 
 
@@ -13,3 +14,4 @@ from .db_helper import db_helper
 from .photo import Photo
 from .preference import Preference
 from .profile import Profile
+from .user import User
