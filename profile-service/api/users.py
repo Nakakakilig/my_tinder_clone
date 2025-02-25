@@ -6,7 +6,7 @@ from api.deps import db_dependency
 router = APIRouter(tags=["users"])
 
 
-@router.get("/", response_model=list[UserRead])
+@router.get("/get-all", response_model=list[UserRead])
 async def get_users(
     session: db_dependency,
 ):
@@ -14,7 +14,7 @@ async def get_users(
     return users
 
 
-@router.post("/", response_model=UserRead)
+@router.post("/create", response_model=UserRead)
 async def create_user(
     session: db_dependency,
     user_create: UserCreate,
