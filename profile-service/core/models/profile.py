@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .user import User
 
 from core.db.base import Base
+from core.db.enums import Gender
 
 
 class Profile(Base):
@@ -17,6 +18,7 @@ class Profile(Base):
     )
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
+    gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
     geo_latitude: Mapped[float] = mapped_column(Float, nullable=False)
     geo_longitude: Mapped[float] = mapped_column(Float, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(
