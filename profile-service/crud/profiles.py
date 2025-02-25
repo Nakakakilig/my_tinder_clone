@@ -21,3 +21,8 @@ async def create_profile(
     await session.commit()
     await session.refresh(profile)
     return profile
+
+
+async def get_profile(session: AsyncSession, profile_id: int) -> Profile:
+    profile = await session.get(Profile, profile_id)
+    return profile

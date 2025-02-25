@@ -25,3 +25,15 @@ async def create_profile(
         profile_create=profile_create,
     )
     return profile
+
+
+@router.get("/get/{profile_id}", response_model=ProfileRead)
+async def get_profile(
+    session: db_dependency,
+    profile_id: int,
+) -> ProfileRead:
+    profile = await profiles_crud.get_profile(
+        session=session,
+        profile_id=profile_id,
+    )
+    return profile
