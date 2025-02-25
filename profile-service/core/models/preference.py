@@ -6,8 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 if TYPE_CHECKING:
     from .user import User
 
-from .base import Base
-from .enums import Gender
+from core.db.base import Base
+from core.db.enums import Gender
 
 
 class Preference(Base):

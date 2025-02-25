@@ -3,7 +3,8 @@ from logging.config import fileConfig
 
 from alembic import context
 from core.config import settings
-from core.models import Base
+from core.models.user import User  # need it for autogenerate  # noqa: F401
+from core.db.base import Base
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config

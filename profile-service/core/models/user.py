@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .preference import Preference
     from .profile import Profile
 
-from .base import Base
+from core.db.base import Base
 
 
 class User(Base):
