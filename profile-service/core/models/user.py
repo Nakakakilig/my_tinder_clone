@@ -15,9 +15,11 @@ class User(Base):
     __tablename__ = "users"
 
     username: Mapped[str] = mapped_column(unique=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
+    created_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
     updated_at: Mapped[DateTime] = mapped_column(
-        DateTime, server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
     profile: Mapped["Profile"] = relationship(back_populates="user", uselist=False)

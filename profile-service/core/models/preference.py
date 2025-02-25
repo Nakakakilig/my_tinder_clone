@@ -20,7 +20,7 @@ class Preference(Base):
     age: Mapped[int] = mapped_column(Integer, nullable=False)
     radius: Mapped[int] = mapped_column(Integer, nullable=False)
     updated_at: Mapped[DateTime] = mapped_column(
-        DateTime, server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
     user: Mapped["User"] = relationship(back_populates="preference")
