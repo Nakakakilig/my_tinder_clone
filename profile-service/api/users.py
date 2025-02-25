@@ -24,3 +24,12 @@ async def create_user(
         user_create=user_create,
     )
     return user
+
+
+@router.get("/get/{user_id}", response_model=UserRead)
+async def get_user(
+    session: db_dependency,
+    user_id: int,
+) -> UserRead:
+    user = await users_crud.get_user(session=session, user_id=user_id)
+    return user
