@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional
+
 from pydantic import BaseModel
+
 from core.db.enums import Gender
 
 
@@ -11,8 +12,6 @@ class ProfileBase(BaseModel):
     gender: Gender
     geo_latitude: float
     geo_longitude: float
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
 
 
 class ProfileCreate(ProfileBase):
@@ -21,3 +20,5 @@ class ProfileCreate(ProfileBase):
 
 class ProfileRead(ProfileBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
