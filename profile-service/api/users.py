@@ -23,6 +23,7 @@ async def create_user(
         session=session,
         user_create=user_create,
     )
+    # TODO: somehow create profile after user creation
     return user
 
 
