@@ -1,13 +1,10 @@
 import uvicorn
 from core.config import settings
+from api.main import router as deck_router
 from fastapi import FastAPI
 
 app = FastAPI()
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+app.include_router(deck_router)
 
 
 if __name__ == "__main__":
