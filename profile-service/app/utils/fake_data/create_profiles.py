@@ -26,6 +26,7 @@ async def create_multiple_profiles(N_profiles: int = 100):
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             gender=random.choice(list(Gender)),
+            age=random.randint(18, 60),
             geo_latitude=random.uniform(BOTTOM_LEFT_LATITUDE, TOP_RIGHT_LATITUDE),
             geo_longitude=random.uniform(BOTTOM_LEFT_LONGITUDE, TOP_RIGHT_LONGITUDE),
         )

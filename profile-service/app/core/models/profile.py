@@ -19,6 +19,7 @@ class Profile(Base):
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
     gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
+    age: Mapped[int] = mapped_column(Integer, nullable=False)
     geo_latitude: Mapped[float] = mapped_column(Float, nullable=False)
     geo_longitude: Mapped[float] = mapped_column(Float, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(

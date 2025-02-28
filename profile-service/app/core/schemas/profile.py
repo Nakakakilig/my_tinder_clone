@@ -10,6 +10,7 @@ class ProfileBase(BaseModel):
     first_name: str
     last_name: str
     gender: Gender
+    age: int
     geo_latitude: float
     geo_longitude: float
 
