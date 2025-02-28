@@ -1,5 +1,5 @@
 [project]
-name = "my-tinder-clone"
+name = "profile-service"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
