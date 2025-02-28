@@ -1,8 +1,6 @@
 from datetime import datetime
-
 from pydantic import BaseModel
-
-from core.db.enums import Gender
+from .enums import Gender
 
 
 class ProfileBase(BaseModel):
