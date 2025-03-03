@@ -12,14 +12,34 @@ class RunConfig(BaseModel):
     port: int = 8001
 
 
-class ServicesConfig(BaseModel):
-    profiles_url: str = "http://0.0.0.0:8000/"
+class ProfileServicesConfig(BaseModel):
+    profiles_base_url: str = "http://0.0.0.0:8000/api/profiles"
+
+    def get_all_profiles_url(self) -> str:
+        return f"{self.profiles_base_url}/get-all"
+
+    def get_profile_url(self, profile_id: int) -> str:
+        return f"{self.profiles_base_url}/get/{profile_id}"
+
+    def get_matching_profiles_url(self, profile_id: int) -> str:
+        return f"{self.profiles_base_url}/get/{profile_id}/matches"
+
+
+class PreferenceServicesConfig(BaseModel):
+    preferences_base_url: str = "http://0.0.0.0:8000/api/preferences"
+
+    def get_all_preferences_url(self) -> str:
+        return f"{self.preferences_base_url}/get-all"
+
+    def get_preference_url(self, preference_id: int) -> str:
+        return f"{self.preferences_base_url}/get/{preference_id}"
 
 
 class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
-    services: ServicesConfig = ServicesConfig()
+    profile_service: ProfileServicesConfig = ProfileServicesConfig()
+    preference_service: PreferenceServicesConfig = PreferenceServicesConfig()
 
 
 settings = Settings()
