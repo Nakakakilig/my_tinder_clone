@@ -1,7 +1,8 @@
-from core.schemas.profile import ProfileCreate, ProfileRead
-from fastapi import APIRouter
 from api.deps import db_dependency
 from crud import profiles as profiles_crud
+from fastapi import APIRouter
+
+from common.user_profile import ProfileCreate, ProfileRead
 
 router = APIRouter(tags=["profiles"])
 

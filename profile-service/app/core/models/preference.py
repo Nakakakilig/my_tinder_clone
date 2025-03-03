@@ -6,8 +6,15 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 if TYPE_CHECKING:
     from .user import User
 
+import os
+import sys
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
+)
 from core.db.base import Base
-from core.db.enums import Gender
+
+from common.enums import Gender
 
 
 class Preference(Base):

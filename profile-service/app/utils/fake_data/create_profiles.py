@@ -2,13 +2,21 @@ import os
 import random
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
+)
 
+sys.path.append(
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../../../../")  # for common
+    )
+)
 from core.db.db_helper import db_helper
-from core.db.enums import Gender
 from core.models.profile import Profile
-from core.schemas.profile import ProfileCreate
 from faker import Faker
+
+from common.enums import Gender
+from common.user_profile import ProfileCreate
 
 fake = Faker("uk_UA")
 
