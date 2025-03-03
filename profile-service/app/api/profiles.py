@@ -1,6 +1,6 @@
 from api.deps import db_dependency
 from crud import profiles as profiles_crud
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from common.profile import ProfileCreate, ProfileRead
 
@@ -37,4 +37,6 @@ async def get_profile(
         session=session,
         profile_id=profile_id,
     )
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
     return profile
