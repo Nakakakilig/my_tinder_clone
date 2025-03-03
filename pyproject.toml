@@ -1,18 +1,19 @@
 [project]
-name = "profile-service"
+name = "my-tinder-clone"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aioredis>=2.0.1",
     "alembic>=1.14.1",
     "asyncpg>=0.30.0",
     "black>=25.1.0",
     "faker>=36.1.1",
-    "fastapi>=0.115.8",
+    "fastapi>=0.115.9",
+    "httpx>=0.28.1",
     "pre-commit>=4.1.0",
-    "psycopg2-binary>=2.9.10",
-    "pydantic-settings>=2.7.1",
+    "pydantic-settings>=2.8.1",
     "sqlalchemy[asyncio]>=2.0.38",
     "uvicorn>=0.34.0",
 ]
