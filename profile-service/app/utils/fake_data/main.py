@@ -8,11 +8,10 @@ N_USERS = 100
 
 
 async def main():
-    await asyncio.gather(
-        create_multiple_users(N_USERS),
-        create_multiple_profiles(N_profiles=N_USERS),
-        create_multiple_preferences(N_preferences=N_USERS),
-    )
+    await create_multiple_users(N_USERS)
+    await create_multiple_profiles(N_USERS)
+    await create_multiple_preferences(N_USERS)
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
