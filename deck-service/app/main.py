@@ -6,6 +6,7 @@ from fastapi import FastAPI
 app = FastAPI()
 app.include_router(deck_router)
 
+# TODO: add redis connect/shutdown to lifespan
 
 if __name__ == "__main__":
     uvicorn.run(
