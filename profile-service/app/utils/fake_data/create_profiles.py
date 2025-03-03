@@ -16,7 +16,7 @@ from core.models.profile import Profile
 from faker import Faker
 
 from common.enums import Gender
-from common.user_profile import ProfileCreate
+from common.profile import ProfileCreate
 
 fake = Faker("uk_UA")
 

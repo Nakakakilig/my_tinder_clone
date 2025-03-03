@@ -4,7 +4,7 @@ from core.models.profile import Profile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from common.user_profile import ProfileCreate
+from common.profile import ProfileCreate
 
 
 async def get_all_profiles(session: AsyncSession) -> Sequence[Profile]:
