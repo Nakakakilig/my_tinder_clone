@@ -14,6 +14,7 @@ class ApiPrefix(BaseModel):
     prefix: str = "/api"
     users: str = "/users"
     profiles: str = "/profiles"
+    preferences: str = "/preferences"
 
 
 class DatabaseConfig(BaseModel):
