@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .user import User
+    from .preference import Preference
 
 from core.db.base import Base
 
@@ -31,3 +32,6 @@ class Profile(Base):
     )
 
     user: Mapped["User"] = relationship(back_populates="profile")
+    preference: Mapped["Preference"] = relationship(
+        back_populates="profile", uselist=False
+    )

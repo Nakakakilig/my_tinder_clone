@@ -6,7 +6,7 @@ from .enums import Gender
 
 
 class PreferenceBase(BaseModel):
-    user_id: int
+    profile_id: int
     gender: Gender
     age: int
     radius: int

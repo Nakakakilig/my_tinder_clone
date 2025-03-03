@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .photo import Photo
-    from .preference import Preference
     from .profile import Profile
 
 from core.db.base import Base
@@ -24,6 +23,3 @@ class User(Base):
 
     profile: Mapped["Profile"] = relationship(back_populates="user", uselist=False)
     photos: Mapped[list["Photo"]] = relationship(back_populates="user")
-    preference: Mapped["Preference"] = relationship(
-        back_populates="user", uselist=False
-    )
