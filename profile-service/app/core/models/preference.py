@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from core.db.base import Base
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -11,8 +12,7 @@ import sys
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
-)
-from core.db.base import Base
+)  # for common
 
 from common.enums import Gender
 

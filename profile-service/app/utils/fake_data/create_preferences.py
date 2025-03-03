@@ -6,13 +6,14 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
 )
 
+from core.db.db_helper import db_helper
+from core.models.preference import Preference
+
 sys.path.append(
     os.path.abspath(
         os.path.join(os.path.dirname(__file__), "../../../../")  # for common
     )
 )
-from core.db.db_helper import db_helper
-from core.models.preference import Preference
 
 from common.enums import Gender
 from common.preferences import PreferenceCreate
