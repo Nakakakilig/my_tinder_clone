@@ -3,7 +3,7 @@ services:
   pg-deck:
     image: postgres
     environment:
-      POSTGRES_DB: profile
+      POSTGRES_DB: deck
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
