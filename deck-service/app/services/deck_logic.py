@@ -1,10 +1,4 @@
-import os
-import sys
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
-)  # for common
-from common.preferences import PreferenceRead
+from core.schemas.preferences import PreferenceRead
 
 
 def generate_deck_logic(

@@ -1,12 +1,5 @@
-import os
-import sys
-
+from core.schemas.enums import Gender
 from pydantic import BaseModel
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
-)  # for common
-from common.enums import Gender
 
 
 class MatchCard(BaseModel):  # profile card of a potential match

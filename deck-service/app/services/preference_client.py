@@ -1,7 +1,7 @@
 import httpx
 from core.config import settings
 
-from common.preferences import PreferenceBase
+from core.schemas.preferences import PreferenceBase
 
 
 async def get_profile_preferences(profile_id: int) -> PreferenceBase:
