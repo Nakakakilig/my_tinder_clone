@@ -1,6 +1,6 @@
 services:
 
-  pg:
+  pg-profile:
     image: postgres
     environment:
       POSTGRES_DB: profile
