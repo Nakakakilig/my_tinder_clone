@@ -9,15 +9,15 @@ sys.path.append(
 from common.enums import Gender
 
 
-class DeckItem(BaseModel):
+class MatchCard(BaseModel):  # profile card of a potential match
     profile_id: int
     first_name: str
     last_name: str
     gender: Gender
     age: int
-    location: str
+    distance_km: float
 
 
-class DeckRead(BaseModel):
+class MatchDeck(BaseModel):
     profile_id: int
-    cards: list[DeckItem]
+    candidates: list[MatchCard]
