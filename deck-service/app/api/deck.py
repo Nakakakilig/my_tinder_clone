@@ -1,9 +1,9 @@
 from api.deps import deck_dependency
 from core.schemas.deck import MatchDeck
 from fastapi import APIRouter, HTTPException
-from services.deck_logic import generate_deck_logic
+
 from services.preference_client import get_profile_preferences
-from services.profile_client import get_candidate_profiles_for_deck
+from services.profile_client import get_candidate_profiles, convert_to_model
 from core.config import settings
 
 router = APIRouter(tags=["decks"])
@@ -16,22 +16,18 @@ async def generate_deck(
     need_filter: bool = False,
     limit: int = settings.profile_service.limit_matched_profiles,
 ):
-    profile_preferences = await get_profile_preferences(profile_id)
-    deck_cards = await get_candidate_profiles_for_deck(
-        profile_preferences,
+    preferences = await get_profile_preferences(profile_id)
+    candidate_profiles = await get_candidate_profiles(
+        preferences,
         need_filter=need_filter,
         limit=limit,
     )
-    deck = MatchDeck(profile_id=profile_id, candidates=deck_cards)
-    return deck
-    if not profile_preferences:
-        raise HTTPException(status_code=404, detail="Profile not found")
-
-    deck_cards = generate_deck_logic(
-        profile_id,
+    candidates = await convert_to_model(
+        candidate_profiles,
     )
 
-    await cache.set_deck(profile_id, deck.dict())
+    deck = MatchDeck(profile_id=profile_id, candidates=candidates)
+    await cache.set_deck(profile_id, deck.model_dump())
 
     return deck
 
