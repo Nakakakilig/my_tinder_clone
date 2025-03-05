@@ -3,7 +3,6 @@ __all__ = (
     "Profile",
     "Preference",
     "Photo",
-    "User",
 )
 
 
