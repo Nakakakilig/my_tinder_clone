@@ -7,7 +7,7 @@ from common.preferences import PreferenceCreate, PreferenceRead
 router = APIRouter(tags=["preferences"])
 
 
-@router.get("/get-all", response_model=list[PreferenceRead])
+@router.get("/", response_model=list[PreferenceRead])
 async def get_profiles(
     session: db_dependency,
 ):
@@ -15,7 +15,7 @@ async def get_profiles(
     return profiles
 
 
-@router.post("/create", response_model=PreferenceRead)
+@router.post("/", response_model=PreferenceRead)
 async def create_profile(
     session: db_dependency,
     profile_create: PreferenceCreate,

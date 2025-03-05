@@ -8,7 +8,7 @@ from common.enums import Gender
 router = APIRouter(tags=["profiles"])
 
 
-@router.get("/get-all", response_model=list[ProfileRead])
+@router.get("/", response_model=list[ProfileRead])
 async def get_profiles(
     session: db_dependency,
 ):
@@ -16,7 +16,7 @@ async def get_profiles(
     return profiles
 
 
-@router.post("/create", response_model=ProfileRead)
+@router.post("/", response_model=ProfileRead)
 async def create_profile(
     session: db_dependency,
     profile_create: ProfileCreate,
