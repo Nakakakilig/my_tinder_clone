@@ -1,8 +1,8 @@
 from api.deps import db_dependency
 from crud import profiles as profiles_crud
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 
-from common.profile import ProfileCreate, ProfileRead
+from common.profile import ProfileCreate, ProfileRead, ProfileWithDistance
 from common.enums import Gender
 
 router = APIRouter(tags=["profiles"])
@@ -43,19 +43,23 @@ async def get_profile(
     return profile
 
 
-@router.get("/{profile_id}/match", response_model=list[ProfileRead])
+@router.get("/{profile_id}/matches", response_model=list[ProfileWithDistance])
 async def get_matching_profiles(
     session: db_dependency,
     profile_id: int = None,
     gender: Gender | None = None,
-    age: int | None = Query(None, qe=18, le=60),
-    radius: int | None = Query(None, qe=18),
-) -> list[ProfileRead]:
+    age: int = None,
+    radius: int | None = None,
+    limit: int | None = 10,
+) -> list[dict]:
     matching_profiles = await profiles_crud.get_matching_profiles(
-        session=session, profile_id=profile_id, gender=gender, age=age, radius=radius
+        session=session,
+        # TODO: maybe i can paste here PreferenceBase instead a lot of params
+        profile_id=profile_id,
+        gender=gender,
+        age=age,
+        radius=radius,
+        limit=limit,
     )
-
-    if not matching_profiles:
-        raise HTTPException(status_code=404, detail="No matching profiles found")
 
     return matching_profiles

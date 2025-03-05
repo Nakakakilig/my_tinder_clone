@@ -21,3 +21,8 @@ class ProfileRead(ProfileBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class ProfileWithDistance(BaseModel):
+    profile: ProfileRead
+    distance_km: float

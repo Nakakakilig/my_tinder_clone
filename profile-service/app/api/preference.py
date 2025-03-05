@@ -38,3 +38,7 @@ async def get_profile(
         preference_id=preference_id,
     )
     return profile
+
+
+# TODO: when want to update preference - generate new deck
+# TODO: # @router.put("/update/{preference_id}", response_model=PreferenceRead)
