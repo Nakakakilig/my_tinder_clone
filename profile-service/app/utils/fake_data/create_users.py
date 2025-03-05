@@ -1,15 +1,7 @@
-import os
-import sys
-
-from faker import Faker
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-)  # for core
-
 from core.db.db_helper import db_helper
 from core.models.user import User
 from core.schemas.user import UserCreate
+from faker import Faker
 
 fake = Faker("uk_UA")
 

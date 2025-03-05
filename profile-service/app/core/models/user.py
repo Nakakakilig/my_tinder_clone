@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING
 
+from core.db.base import Base
 from sqlalchemy import DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .photo import Photo
     from .profile import Profile
-
-from core.db.base import Base
 
 
 class User(Base):

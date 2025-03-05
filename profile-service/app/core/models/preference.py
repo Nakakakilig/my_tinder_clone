@@ -1,20 +1,12 @@
 from typing import TYPE_CHECKING
 
 from core.db.base import Base
+from core.schemas.enums import Gender
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .profile import Profile
-
-import os
-import sys
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
-)  # for common
-
-from common.enums import Gender
 
 
 class Preference(Base):

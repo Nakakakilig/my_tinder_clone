@@ -1,9 +1,9 @@
-from api.deps import db_dependency
+from core.schemas.enums import Gender
+from core.schemas.profile import ProfileCreate, ProfileRead, ProfileWithDistance
 from crud import profiles as profiles_crud
 from fastapi import APIRouter, HTTPException
 
-from common.profile import ProfileCreate, ProfileRead, ProfileWithDistance
-from common.enums import Gender
+from api.deps import db_dependency
 
 router = APIRouter(tags=["profiles"])
 

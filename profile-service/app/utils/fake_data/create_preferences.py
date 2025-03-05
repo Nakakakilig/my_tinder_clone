@@ -1,22 +1,9 @@
-import os
 import random
-import sys
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
-)
 
 from core.db.db_helper import db_helper
 from core.models.preference import Preference
-
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../")  # for common
-    )
-)
-
-from common.enums import Gender
-from common.preferences import PreferenceCreate
+from core.schemas.enums import Gender
+from core.schemas.preferences import PreferenceCreate
 
 
 async def create_multiple_preferences(N_preferences: int = 100):

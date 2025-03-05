@@ -1,11 +1,10 @@
 from typing import Sequence
 
 from core.models.profile import Profile
+from core.schemas.profile import ProfileCreate
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils.calc_distance import calc_distance_in_query
-
-from common.profile import ProfileCreate
 
 
 async def get_all_profiles(session: AsyncSession) -> Sequence[Profile]:

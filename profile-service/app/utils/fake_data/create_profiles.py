@@ -10,15 +10,8 @@ sys.path.append(
 
 from core.db.db_helper import db_helper
 from core.models.profile import Profile
-
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../")  # for common
-    )
-)
-
-from common.enums import Gender
-from common.profile import ProfileCreate
+from core.schemas.enums import Gender
+from core.schemas.profile import ProfileCreate
 
 fake = Faker("uk_UA")
 

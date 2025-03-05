@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING
 
+from core.db.base import Base
+from core.schemas.enums import Gender
 from sqlalchemy import DateTime, Enum, Float, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from .user import User
     from .preference import Preference
-
-from core.db.base import Base
-
-from common.enums import Gender
+    from .user import User
 
 
 class Profile(Base):

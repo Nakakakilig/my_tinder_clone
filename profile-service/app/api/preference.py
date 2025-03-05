@@ -1,8 +1,8 @@
-from api.deps import db_dependency
+from core.schemas.preferences import PreferenceCreate, PreferenceRead
 from crud import preferences as preferences_crud
 from fastapi import APIRouter
 
-from common.preferences import PreferenceCreate, PreferenceRead
+from api.deps import db_dependency
 
 router = APIRouter(tags=["preferences"])
 
