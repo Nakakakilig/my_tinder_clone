@@ -35,11 +35,11 @@ async def get_matching_profiles(
     gender: str | None,
     age: int | None,
     radius: int | None,
-    limit: int | None = 10,
+    limit: int | None,
 ) -> list[Profile]:
     current_profile = await session.get(Profile, profile_id)
     if not current_profile:
-        return []
+        return None
 
     distance_expr = calc_distance_in_query(current_profile, Profile)
 

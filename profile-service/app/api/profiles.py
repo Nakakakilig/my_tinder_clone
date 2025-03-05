@@ -61,5 +61,7 @@ async def get_matching_profiles(
         radius=radius,
         limit=limit,
     )
+    if not matching_profiles:
+        raise HTTPException(status_code=404, detail="No matching profiles found")
 
     return matching_profiles
