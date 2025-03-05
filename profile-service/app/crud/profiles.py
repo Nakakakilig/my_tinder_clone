@@ -52,6 +52,7 @@ async def get_matching_profiles(
     query = (
         select(Profile, distance_expr)
         .filter(and_(*filters))
+        .group_by(Profile.id)
         .order_by(distance_expr)
         .limit(limit)
     )
