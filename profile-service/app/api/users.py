@@ -27,7 +27,7 @@ async def create_user(
     return user
 
 
-@router.get("/get/{user_id}", response_model=UserRead)
+@router.get("/{user_id}", response_model=UserRead)
 async def get_user(
     session: db_dependency,
     user_id: int,

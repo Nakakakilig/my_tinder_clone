@@ -28,7 +28,7 @@ async def create_profile(
     return profile
 
 
-@router.get("/get/{preference_id}", response_model=PreferenceRead)
+@router.get("/{preference_id}", response_model=PreferenceRead)
 async def get_profile(
     session: db_dependency,
     preference_id: int,

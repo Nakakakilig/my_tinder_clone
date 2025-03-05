@@ -29,7 +29,7 @@ async def create_profile(
     return profile
 
 
-@router.get("/get/{profile_id}", response_model=ProfileRead)
+@router.get("/{profile_id}", response_model=ProfileRead)
 async def get_profile(
     session: db_dependency,
     profile_id: int,
