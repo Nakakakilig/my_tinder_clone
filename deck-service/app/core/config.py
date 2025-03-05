@@ -14,15 +14,16 @@ class RunConfig(BaseModel):
 
 class ProfileServicesConfig(BaseModel):
     profiles_base_url: str = "http://0.0.0.0:8000/api/profiles"
+    limit_matched_profiles: int = 10
 
     def get_all_profiles_url(self) -> str:
         return f"{self.profiles_base_url}/get-all"
 
     def get_profile_url(self, profile_id: int) -> str:
-        return f"{self.profiles_base_url}/get/{profile_id}"
+        return f"{self.profiles_base_url}/{profile_id}"
 
     def get_matching_profiles_url(self, profile_id: int) -> str:
-        return f"{self.profiles_base_url}/get/{profile_id}/matches"
+        return f"{self.profiles_base_url}/{profile_id}/matches"
 
 
 class PreferenceServicesConfig(BaseModel):
@@ -32,7 +33,7 @@ class PreferenceServicesConfig(BaseModel):
         return f"{self.preferences_base_url}/get-all"
 
     def get_preference_url(self, preference_id: int) -> str:
-        return f"{self.preferences_base_url}/get/{preference_id}"
+        return f"{self.preferences_base_url}/{preference_id}"
 
 
 class Settings(BaseSettings):
