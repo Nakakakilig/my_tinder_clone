@@ -28,8 +28,6 @@ class DatabaseConfig(BaseModel):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(
-            # ".env.template",
-            # ".env",
             "profile-service/.env.template",
             "profile-service/.env",
         ),
