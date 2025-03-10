@@ -4,6 +4,7 @@ from datetime import datetime
 from aiokafka import AIOKafkaProducer
 from core.config import settings
 from core.schemas.profile import ProfileCreate
+from core.schemas.preferences import PreferenceCreate
 from enum import Enum
 
 
@@ -37,5 +38,21 @@ async def publish_profile_created_event(
         },
         "timestamp": datetime.now().isoformat(),
     }
+
+    await producer.send_and_wait(settings.kafka.profile_topic, event)
+
+
+async def publish_preference_created_event(
+    preference_create: PreferenceCreate,
+):
+    event = {
+        "event_type": "preference_created",
+        "data": {
+            **preference_create.model_dump(exclude={"profile_id"}),
+        },
+        "timestamp": datetime.now().isoformat(),
+    }
+    if not event["data"]:
+        raise Exception("Preference data is empty")
 
     await producer.send_and_wait(settings.kafka.profile_topic, event)
