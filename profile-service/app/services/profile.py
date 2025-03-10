@@ -27,6 +27,7 @@ async def get_profiles_service(db: AsyncSession) -> list[Profile]:
 async def create_profile_service(
     db: AsyncSession,
     profile_create: ProfileCreate,
+    need_event: bool = True,
 ) -> Profile:
     existing_profile = await crud_profile.get_profile(db, profile_create.user_id)
 
@@ -42,13 +43,11 @@ async def create_profile_service(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Profile creation failed.",
         )
-    # try:
-    await publish_profile_created_event(profile_create)
-    # except Exception:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    #         detail="Profile created, but event publishing failed.",
-    #     )
+
+    if need_event:  # value false only for creating fake data
+        # todo: add some handle for exceptions
+        await publish_profile_created_event(profile_create)
+
     return profile
 
 
