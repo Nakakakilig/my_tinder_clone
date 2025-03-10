@@ -1,8 +1,10 @@
 from typing import Any, Literal, TypedDict
 from core.db.db_helper import db_helper
 from crud import profile as profile_crud
+from crud import preference as preference_crud
 
 from core.schemas.profile import ProfileCreate
+from core.schemas.preferences import PreferenceCreate
 
 
 class Event(TypedDict):
@@ -24,20 +26,30 @@ async def handle_event(event: Event):
         return
 
     if event_type == "profile_created":
-        print('I SAW "PROFILE_CREATED" EVENT')
         await handle_profile_created(data=data)
+    elif event_type == "preference_created":
+        await handle_preference_created(data)
 
 
 async def handle_profile_created(
     data: DataType,
 ):
     async with db_helper.session_factory() as session:
-        print('START "PROFILE_CREATED" EVENT')
         profile_data: ProfileCreate = ProfileCreate(**data)
-        print(f"{profile_data = }")
 
         await profile_crud.create_profile(
             session,
             profile_data,
         )
-        print('END "PROFILE_CREATED" EVENT')
+
+
+async def handle_preference_created(
+    data: DataType,
+):
+    async with db_helper.session_factory() as session:
+        preference_data: PreferenceCreate = PreferenceCreate(**data)
+
+        await preference_crud.create_preference(
+            session,
+            preference_data,
+        )
