@@ -1,6 +1,8 @@
 from typing import Annotated, Any
 
+from core.db.db_helper import db_helper
 from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class SingletonDeckCache:
@@ -24,3 +26,5 @@ def get_singleton_deck_cache():
 
 
 deck_dependency = Annotated[SingletonDeckCache, Depends(get_singleton_deck_cache)]
+
+db_dependency = Annotated[AsyncSession, Depends(db_helper.session_getter)]
