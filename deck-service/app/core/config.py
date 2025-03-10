@@ -47,6 +47,12 @@ class DatabaseConfig(BaseModel):
     pool_size: int = 50
 
 
+class KafkaConfig(BaseModel):
+    # bootstrap_servers: str = "kafka:9092"
+    bootstrap_servers: str = "localhost:9092"
+    profile_topic: str = "profile-events"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(
@@ -62,6 +68,7 @@ class Settings(BaseSettings):
     profile_service: ProfileServicesConfig = ProfileServicesConfig()
     preference_service: PreferenceServicesConfig = PreferenceServicesConfig()
     db: DatabaseConfig
+    kafka: KafkaConfig = KafkaConfig()
 
 
 settings = Settings()

@@ -1,9 +1,20 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
-from core.config import settings
 from api.main import router as deck_router
+from core.config import settings
 from fastapi import FastAPI
 
-app = FastAPI()
+from kafka.consumer import start_consumer_loop
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await start_consumer_loop()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(deck_router)
 
 # TODO: add redis connect/shutdown to lifespan
