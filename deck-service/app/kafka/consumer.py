@@ -28,7 +28,6 @@ async def consume():
     try:
         print("Kafka consumer started and listening...")
         async for message in consumer:
-            print(message)
             event = message.value
             await handle_event(event)
     finally:
