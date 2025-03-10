@@ -37,6 +37,5 @@ async def publish_profile_created_event(
         },
         "timestamp": datetime.now().isoformat(),
     }
-    print('PUBLISHING "PROFILE_CREATED" EVENT')
-    # await producer.send_and_wait(settings.kafka.profile_topic, event)
-    await producer.send(settings.kafka.profile_topic, event)
+
+    await producer.send_and_wait(settings.kafka.profile_topic, event)
