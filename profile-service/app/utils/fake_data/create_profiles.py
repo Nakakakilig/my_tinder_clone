@@ -1,16 +1,17 @@
 import os
 import random
 import sys
-from datetime import datetime
 
 from aiokafka import AIOKafkaProducer
 from faker import Faker
-from services.profile import create_profile_service
+
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
 )
 
+from utils.fake_data.helper import sync_with_deck_service
+from services.profile import create_profile_service
 from core.db.db_helper import db_helper
 from core.schemas.enums import Gender
 from core.schemas.profile import ProfileCreate
@@ -44,20 +45,12 @@ async def create_multiple_profiles(
     async for session in db_helper.session_getter():
         for profile_create in profile_creates:
             await create_profile_service(session, profile_create, need_event=False)
-            await sync_profile_with_deck_service(producer, profile_create)
 
+            await sync_with_deck_service(
+                producer,
+                event_type="profile_created",
+                data={**profile_create.model_dump(exclude={"user_id"})},
+                topic="profile-events",
+            )
 
-async def sync_profile_with_deck_service(
-    producer: AIOKafkaProducer,
-    profile_create: ProfileCreate,
-):
-    """with help of kafka producer, create same user in deck-service"""
-    fake_event = {
-        "event_type": "profile_created",
-        "data": {
-            **profile_create.model_dump(exclude={"user_id"}),
-        },
-        "timestamp": datetime.now().isoformat(),
-    }
-
-    await producer.send_and_wait("profile-events", fake_event)
+    print(f"Created {N_profiles} profiles")

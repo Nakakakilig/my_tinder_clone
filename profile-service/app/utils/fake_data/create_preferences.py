@@ -1,12 +1,24 @@
+import os
 import random
+import sys
+
+from aiokafka import AIOKafkaProducer
+from helper import sync_with_deck_service
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))  # for core
+)
 
 from core.db.db_helper import db_helper
-from core.models.preference import Preference
 from core.schemas.enums import Gender
 from core.schemas.preferences import PreferenceCreate
+from services.preference import create_preference_service
 
 
-async def create_multiple_preferences(N_preferences: int = 100):
+async def create_multiple_preferences(
+    producer: AIOKafkaProducer,
+    N_preferences: int = 100,
+):
     preferences_creates = [
         PreferenceCreate(
             profile_id=i,
@@ -18,10 +30,16 @@ async def create_multiple_preferences(N_preferences: int = 100):
     ]
 
     async for session in db_helper.session_getter():
-        preferences = [
-            Preference(**preferences_create.model_dump())
-            for preferences_create in preferences_creates
-        ]
-        session.add_all(preferences)
-        await session.commit()
-        print(f"Successfully created {len(preferences)} preferences")
+        for preference_create in preferences_creates:
+            await create_preference_service(
+                session, preference_create, need_event=False
+            )
+
+            await sync_with_deck_service(
+                producer,
+                event_type="preference_created",
+                data={**preference_create.model_dump()},
+                topic="profile-events",
+            )
+
+    print(f"Created {N_preferences} preferences")
