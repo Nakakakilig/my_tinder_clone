@@ -4,7 +4,6 @@ from .enums import Gender
 
 
 class ProfileBase(BaseModel):
-    user_id: int
     first_name: str
     last_name: str
     gender: Gender
