@@ -4,6 +4,8 @@ from crud import profiles as crud_profile
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .kafka_producer import publish_profile_created_event
+
 
 async def get_profiles_service(db: AsyncSession) -> list[Profile]:
     try:
@@ -40,6 +42,13 @@ async def create_profile_service(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Profile creation failed.",
         )
+    # try:
+    await publish_profile_created_event(profile_create)
+    # except Exception:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #         detail="Profile created, but event publishing failed.",
+    #     )
     return profile
 
 
