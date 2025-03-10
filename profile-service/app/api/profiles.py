@@ -34,7 +34,7 @@ async def get_profile(
     session: db_dependency,
     profile_id: int,
 ) -> ProfileRead:
-    return await get_profile_service
+    return await get_profile_service(session, profile_id)
 
 
 @router.get("/{profile_id}/matches", response_model=list[ProfileWithDistance])
