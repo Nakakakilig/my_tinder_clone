@@ -12,7 +12,8 @@ echo -e "\nActivate venv ..."
 source .venv/bin/activate
 
 echo -e "\nRun profile-service/app/utils/fake_data/main.py ..."
-python profile-service/app/utils/fake_data/main.py
+cd profile-service
+python app/utils/fake_data/main.py
 
 echo -e "\nDeactivate venv ..."
 deactivate
