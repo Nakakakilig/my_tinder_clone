@@ -13,6 +13,11 @@ else
     cd kafka
     docker compose down
     docker compose up -d
+
+    docker exec -it kafka-kafka-1 kafka-topics \
+        --create --topic profile-events \
+        --bootstrap-server localhost:9092 \
+        # --partitions 1 --replication-factor 1
 fi
 
 echo -e "\nFinish!\n"
