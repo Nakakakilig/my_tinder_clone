@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 
 from aiokafka import AIOKafkaProducer
 from core.config import settings
@@ -7,6 +6,8 @@ from core.schemas.profile import ProfileCreate
 from core.schemas.preferences import PreferenceCreate
 from enum import Enum
 
+
+from utils.kafka_helper import sync_with_deck_service
 
 producer: AIOKafkaProducer | None = None
 
@@ -31,28 +32,20 @@ async def shutdown_kafka_producer():
 async def publish_profile_created_event(
     profile_create: ProfileCreate,
 ):
-    event = {
-        "event_type": "profile_created",
-        "data": {
-            **profile_create.model_dump(exclude={"user_id"}),
-        },
-        "timestamp": datetime.now().isoformat(),
-    }
-
-    await producer.send_and_wait(settings.kafka.profile_topic, event)
+    await sync_with_deck_service(
+        producer,
+        event_type="profile_created",
+        data={**profile_create.model_dump()},
+        topic=settings.kafka.profile_topic,
+    )
 
 
 async def publish_preference_created_event(
     preference_create: PreferenceCreate,
 ):
-    event = {
-        "event_type": "preference_created",
-        "data": {
-            **preference_create.model_dump(exclude={"profile_id"}),
-        },
-        "timestamp": datetime.now().isoformat(),
-    }
-    if not event["data"]:
-        raise Exception("Preference data is empty")
-
-    await producer.send_and_wait(settings.kafka.profile_topic, event)
+    await sync_with_deck_service(
+        producer,
+        event_type="preference_created",
+        data={**preference_create.model_dump()},
+        topic=settings.kafka.profile_topic,
+    )

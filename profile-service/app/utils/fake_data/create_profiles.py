@@ -5,12 +5,11 @@ import sys
 from aiokafka import AIOKafkaProducer
 from faker import Faker
 
-
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
 )
 
-from utils.fake_data.helper import sync_with_deck_service
+from utils.kafka_helper import sync_with_deck_service
 from services.profile import create_profile_service
 from core.db.db_helper import db_helper
 from core.schemas.enums import Gender

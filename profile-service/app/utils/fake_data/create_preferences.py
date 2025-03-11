@@ -3,7 +3,6 @@ import random
 import sys
 
 from aiokafka import AIOKafkaProducer
-from helper import sync_with_deck_service
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))  # for core
@@ -13,6 +12,7 @@ from core.db.db_helper import db_helper
 from core.schemas.enums import Gender
 from core.schemas.preferences import PreferenceCreate
 from services.preference import create_preference_service
+from utils.kafka_helper import sync_with_deck_service
 
 
 async def create_multiple_preferences(

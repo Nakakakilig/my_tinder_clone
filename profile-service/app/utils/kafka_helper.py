@@ -8,7 +8,7 @@ async def sync_with_deck_service(
     event_type: str,
     data: dict[str, Any],
     topic: str,
-):
+) -> None:
     """General function to sync profile-service data with deck service."""
     fake_event = {
         "event_type": event_type,
