@@ -29,7 +29,9 @@ async def create_profile_service(
     profile_create: ProfileCreate,
     need_event: bool = True,
 ) -> Profile:
-    existing_profile = await crud_profile.get_profile(db, profile_create.user_id)
+    existing_profile = await crud_profile.get_profile_by_user_id(
+        db, profile_create.user_id
+    )
 
     if existing_profile:
         raise HTTPException(

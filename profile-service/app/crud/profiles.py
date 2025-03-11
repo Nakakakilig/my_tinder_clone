@@ -24,9 +24,10 @@ async def create_profile(
     return profile
 
 
-async def get_profile(session: AsyncSession, profile_id: int) -> Profile:
-    profile = await session.get(Profile, profile_id)
-    return profile
+async def get_profile_by_user_id(session: AsyncSession, user_id: int) -> Profile:
+    stmt = select(Profile).where(Profile.user_id == user_id)
+    result = await session.scalars(stmt)
+    return result.one_or_none()
 
 
 async def get_matching_profiles(
