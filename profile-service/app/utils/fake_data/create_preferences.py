@@ -1,3 +1,4 @@
+import asyncio
 import os
 import random
 import sys
@@ -28,6 +29,8 @@ async def create_multiple_preferences(
         )
         for i in range(1, N_preferences + 1)
     ]
+
+    await asyncio.sleep(5)
 
     async for session in db_helper.session_getter():
         for preference_create in preferences_creates:
