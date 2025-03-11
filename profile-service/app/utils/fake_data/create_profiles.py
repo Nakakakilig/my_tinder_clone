@@ -51,7 +51,7 @@ async def create_multiple_profiles(
             await sync_with_deck_service(
                 producer,
                 event_type="profile_created",
-                data={**profile_create.model_dump(exclude={"user_id"})},
+                data={**profile_create.model_dump()},
                 topic="profile-events",
             )
 
