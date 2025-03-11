@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 class Profile(Base):
     __tablename__ = "profiles"
 
+    outer_id: Mapped[int] = mapped_column(Integer, nullable=False)
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
     gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
