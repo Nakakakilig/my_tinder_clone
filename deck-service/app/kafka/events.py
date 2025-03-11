@@ -1,10 +1,11 @@
 from typing import Any, Literal, TypedDict
 from core.db.db_helper import db_helper
-from crud import profile as profile_crud
-from crud import preference as preference_crud
 
 from core.schemas.profile import ProfileCreate
 from core.schemas.preferences import PreferenceCreate
+
+from services.preference import create_preference_service
+from services.profile import create_profile_service
 
 
 class Event(TypedDict):
@@ -36,11 +37,7 @@ async def handle_profile_created(
 ):
     async with db_helper.session_factory() as session:
         profile_data: ProfileCreate = ProfileCreate(**data)
-
-        await profile_crud.create_profile(
-            session,
-            profile_data,
-        )
+        await create_profile_service(session, profile_data)
 
 
 async def handle_preference_created(
@@ -48,8 +45,4 @@ async def handle_preference_created(
 ):
     async with db_helper.session_factory() as session:
         preference_data: PreferenceCreate = PreferenceCreate(**data)
-
-        await preference_crud.create_preference(
-            session,
-            preference_data,
-        )
+        await create_preference_service(session, preference_data)
