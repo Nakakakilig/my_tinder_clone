@@ -23,6 +23,7 @@ async def get_all_profiles(session: AsyncSession) -> Sequence[Profile]:
     return result.all()
 
 
-async def get_profile(session: AsyncSession, profile_id: int) -> Profile:
-    profile = await session.get(Profile, profile_id)
-    return profile
+async def get_profile_by_outer_id(session: AsyncSession, outer_id: int) -> Profile:
+    stmt = select(Profile).where(Profile.outer_id == outer_id)
+    result = await session.scalars(stmt)
+    return result.one_or_none()
