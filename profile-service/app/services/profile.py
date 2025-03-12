@@ -1,10 +1,10 @@
-from core.models.profile import Profile
-from core.schemas.profile import ProfileCreate
-from crud import profiles as crud_profile
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .kafka_producer import publish_profile_created_event
+from app.core.models.profile import Profile
+from app.core.schemas.profile import ProfileCreate
+from app.crud import profiles as crud_profile
+from app.services.kafka_producer import publish_profile_created_event
 
 
 async def get_profiles_service(db: AsyncSession) -> list[Profile]:

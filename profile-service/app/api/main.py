@@ -1,9 +1,9 @@
-from core.config import settings
 from fastapi import APIRouter
 
-from .users import router as user_router
-from .profiles import router as profile_router
-from .preference import router as preference_router
+from app.api.preference import router as preference_router
+from app.api.profiles import router as profile_router
+from app.api.users import router as user_router
+from app.core.config import settings
 
 router = APIRouter(
     prefix=settings.api.prefix,

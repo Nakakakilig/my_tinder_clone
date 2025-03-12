@@ -1,15 +1,14 @@
-from aiokafka import AIOKafkaProducer
 import json
-
-from enum import Enum
 import os
 import sys
+from enum import Enum
+
+from aiokafka import AIOKafkaProducer
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
 )
-from core.config import settings
-
+from app.core.config import settings
 
 producer: AIOKafkaProducer | None = None
 

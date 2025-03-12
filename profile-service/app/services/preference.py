@@ -1,10 +1,10 @@
-from core.models.preference import Preference
-from core.schemas.preferences import PreferenceCreate
-from crud import preferences as crud_preference
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .kafka_producer import publish_preference_created_event
+from app.core.models.preference import Preference
+from app.core.schemas.preferences import PreferenceCreate
+from app.crud import preferences as crud_preference
+from app.services.kafka_producer import publish_preference_created_event
 
 
 async def get_preferences_service(db: AsyncSession) -> list[Preference]:

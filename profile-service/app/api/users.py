@@ -1,7 +1,8 @@
-from core.schemas.user import UserCreate, UserRead
-from crud import users as users_crud
 from fastapi import APIRouter
-from api.deps import db_dependency
+
+from app.api.deps import db_dependency
+from app.core.schemas.user import UserCreate, UserRead
+from app.crud import users as users_crud
 
 router = APIRouter(tags=["users"])
 

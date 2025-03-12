@@ -1,9 +1,9 @@
 import asyncio
 
-from create_preferences import create_multiple_preferences
-from create_profiles import create_multiple_profiles
-from create_users import create_multiple_users
-from create_producer import init_kafka_producer
+from app.utils.fake_data.create_preferences import create_multiple_preferences
+from app.utils.fake_data.create_producer import init_kafka_producer
+from app.utils.fake_data.create_profiles import create_multiple_profiles
+from app.utils.fake_data.create_users import create_multiple_users
 
 N_USERS = 100
 

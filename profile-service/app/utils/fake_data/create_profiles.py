@@ -10,11 +10,11 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))  # for core
 )
 
-from utils.kafka_helper import sync_with_deck_service
-from services.profile import create_profile_service
-from core.db.db_helper import db_helper
-from core.schemas.enums import Gender
-from core.schemas.profile import ProfileCreate
+from app.core.db.db_helper import db_helper
+from app.core.schemas.enums import Gender
+from app.core.schemas.profile import ProfileCreate
+from app.services.profile import create_profile_service
+from app.utils.kafka_helper import sync_with_deck_service
 
 fake = Faker("uk_UA")
 

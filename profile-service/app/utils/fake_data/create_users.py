@@ -1,7 +1,8 @@
-from core.db.db_helper import db_helper
-from core.models.user import User
-from core.schemas.user import UserCreate
 from faker import Faker
+
+from app.core.db.db_helper import db_helper
+from app.core.models.user import User
+from app.core.schemas.user import UserCreate
 
 fake = Faker("uk_UA")
 

@@ -1,12 +1,12 @@
-from core.schemas.preferences import PreferenceCreate, PreferenceRead
 from fastapi import APIRouter
-from services.preference import (
+
+from app.api.deps import db_dependency
+from app.core.schemas.preferences import PreferenceCreate, PreferenceRead
+from app.services.preference import (
     create_preference_service,
     get_preference_service,
     get_preferences_service,
 )
-
-from api.deps import db_dependency
 
 router = APIRouter(tags=["preferences"])
 

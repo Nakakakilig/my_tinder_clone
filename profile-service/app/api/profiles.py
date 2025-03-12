@@ -1,10 +1,10 @@
-from core.schemas.enums import Gender
-from core.schemas.profile import ProfileCreate, ProfileRead, ProfileWithDistance
-from crud import profiles as profiles_crud
 from fastapi import APIRouter, HTTPException
 
-from api.deps import db_dependency
-from services.profile import (
+from app.api.deps import db_dependency
+from app.core.schemas.enums import Gender
+from app.core.schemas.profile import ProfileCreate, ProfileRead, ProfileWithDistance
+from app.crud import profiles as profiles_crud
+from app.services.profile import (
     create_profile_service,
     get_profile_service,
     get_profiles_service,

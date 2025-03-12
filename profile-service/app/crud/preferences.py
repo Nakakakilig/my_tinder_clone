@@ -1,9 +1,10 @@
 from typing import Sequence
 
-from core.models.preference import Preference
-from core.schemas.preferences import PreferenceCreate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.models.preference import Preference
+from app.core.schemas.preferences import PreferenceCreate
 
 
 async def get_all_preferences(session: AsyncSession) -> Sequence[Preference]:

@@ -1,13 +1,12 @@
 import json
-
-from aiokafka import AIOKafkaProducer
-from core.config import settings
-from core.schemas.profile import ProfileCreate
-from core.schemas.preferences import PreferenceCreate
 from enum import Enum
 
+from aiokafka import AIOKafkaProducer
 
-from utils.kafka_helper import sync_with_deck_service
+from app.core.config import settings
+from app.core.schemas.preferences import PreferenceCreate
+from app.core.schemas.profile import ProfileCreate
+from app.utils.kafka_helper import sync_with_deck_service
 
 producer: AIOKafkaProducer | None = None
 
