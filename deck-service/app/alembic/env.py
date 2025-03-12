@@ -1,10 +1,14 @@
 import asyncio
+import os
+import sys
 from logging.config import fileConfig
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from alembic import context
-from core.config import settings
-from core.models.profile import Profile  # need it for autogenerate  # noqa: F401
-from core.db.base import Base
+from app.core.config import settings
+from app.core.models.profile import Profile  # for autogenerate,BEFORE Base # noqa: F401
+from app.core.db.base import Base
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config

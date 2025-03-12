@@ -13,7 +13,7 @@ source .venv/bin/activate
 
 echo -e "\nRun profile-service/app/utils/fake_data/main.py ..."
 cd profile-service
-python app/utils/fake_data/main.py
+python3 -m app.utils.fake_data.main
 
 echo -e "\nDeactivate venv ..."
 deactivate
