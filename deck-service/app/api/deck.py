@@ -1,10 +1,10 @@
-from api.deps import deck_dependency
-from core.schemas.deck import MatchDeck
 from fastapi import APIRouter, HTTPException
 
-from services.preference_client import get_profile_preferences
-from services.profile_client import get_candidate_profiles, convert_to_model
-from core.config import settings
+from app.api.deps import deck_dependency
+from app.core.config import settings
+from app.core.schemas.deck import MatchDeck
+from app.services.preference_client import get_profile_preferences
+from app.services.profile_client import convert_to_model, get_candidate_profiles
 
 router = APIRouter(tags=["decks"])
 

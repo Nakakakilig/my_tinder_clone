@@ -1,10 +1,12 @@
-from time import sleep
-from aiokafka import AIOKafkaConsumer
-import json
 import asyncio
-from core.config import settings
-from kafka.events import handle_event
+import json
+from time import sleep
+
+from aiokafka import AIOKafkaConsumer
 from aiokafka.errors import KafkaConnectionError
+
+from app.core.config import settings
+from app.kafka.events import handle_event
 
 
 async def consume():

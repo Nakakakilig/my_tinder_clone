@@ -1,11 +1,10 @@
 from typing import Any, Literal, TypedDict
-from core.db.db_helper import db_helper
 
-from core.schemas.profile import ProfileCreate
-from core.schemas.preferences import PreferenceCreate
-
-from services.preference import create_preference_service
-from services.profile import create_profile_service
+from app.core.db.db_helper import db_helper
+from app.core.schemas.preferences import PreferenceCreate
+from app.core.schemas.profile import ProfileCreate
+from app.services.preference import create_preference_service
+from app.services.profile import create_profile_service
 
 
 class Event(TypedDict):

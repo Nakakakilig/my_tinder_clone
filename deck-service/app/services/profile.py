@@ -1,7 +1,7 @@
-from core.models.profile import Profile
-from core.schemas.profile import ProfileCreate
-from crud import profile as crud_profile
-from exceptions.profiles import (
+from app.core.models.profile import Profile
+from app.core.schemas.profile import ProfileCreate
+from app.crud import profile as crud_profile
+from app.exceptions.profiles import (
     ProfileAlreadyExists,
     ProfileCreationFailed,
     ProfileNotFound,

@@ -1,9 +1,9 @@
-from fastapi import HTTPException
 import httpx
-from core.config import settings
-from core.schemas.deck import MatchCard
-from core.schemas.preferences import PreferenceBase
-from core.schemas.profile import ProfileWithDistance
+from app.core.config import settings
+from app.core.schemas.deck import MatchCard
+from app.core.schemas.preferences import PreferenceBase
+from app.core.schemas.profile import ProfileWithDistance
+from fastapi import HTTPException
 
 
 async def get_candidate_profiles(

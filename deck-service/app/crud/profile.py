@@ -1,9 +1,10 @@
 from typing import Sequence
 
-from core.models.profile import Profile
-from core.schemas.profile import ProfileCreate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.models.profile import Profile
+from app.core.schemas.profile import ProfileCreate
 
 
 async def create_profile(

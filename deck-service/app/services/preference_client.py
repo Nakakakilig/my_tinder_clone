@@ -1,8 +1,7 @@
-from fastapi import HTTPException
 import httpx
-from core.config import settings
-
-from core.schemas.preferences import PreferenceBase
+from app.core.config import settings
+from app.core.schemas.preferences import PreferenceBase
+from fastapi import HTTPException
 
 
 async def get_profile_preferences(profile_id: int) -> PreferenceBase:

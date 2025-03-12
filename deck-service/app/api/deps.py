@@ -1,8 +1,9 @@
 from typing import Annotated, Any
 
-from core.db.db_helper import db_helper
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.db.db_helper import db_helper
 
 
 class SingletonDeckCache:

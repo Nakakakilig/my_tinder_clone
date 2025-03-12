@@ -1,8 +1,8 @@
-from core.config import settings
-from .deck import router as deck_router
-from .profile import router as profile_router
 from fastapi import APIRouter
 
+from app.api.deck import router as deck_router
+from app.api.profile import router as profile_router
+from app.core.config import settings
 
 router = APIRouter(
     prefix=settings.api.prefix,

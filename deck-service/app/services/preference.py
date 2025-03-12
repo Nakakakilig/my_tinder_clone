@@ -1,7 +1,7 @@
-from core.models.preference import Preference
-from core.schemas.preferences import PreferenceCreate
-from crud import preference as crud_preference
-from exceptions.preferences import (
+from app.core.models.preference import Preference
+from app.core.schemas.preferences import PreferenceCreate
+from app.crud import preference as crud_preference
+from app.exceptions.preferences import (
     PreferenceAlreadyExists,
     PreferenceCreationFailed,
     PreferenceNotFound,

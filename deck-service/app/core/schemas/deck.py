@@ -1,5 +1,6 @@
-from core.schemas.enums import Gender
 from pydantic import BaseModel
+
+from app.core.schemas.enums import Gender
 
 
 class MatchCard(BaseModel):  # profile card of a potential match
