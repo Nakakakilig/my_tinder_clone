@@ -1,26 +1,30 @@
 from fastapi import APIRouter, HTTPException
 
-from app.api.deps import deck_dependency
+import app.crud.preference as preference_crud
+import app.crud.profile as profile_crud
+from app.api.deps import db_dependency, deck_dependency
 from app.core.config import settings
 from app.core.schemas.deck import MatchDeck
-from app.services.preference_client import get_profile_preferences
-from app.services.profile_client import convert_to_model, get_candidate_profiles
+from app.core.schemas.preferences import PreferenceBase
+from app.services.profile_client import convert_to_model
 
 router = APIRouter(tags=["decks"])
 
 
 @router.post("/{profile_id}/refresh", response_model=MatchDeck)
 async def generate_deck(
+    session: db_dependency,
     profile_id: int,
     cache: deck_dependency,
-    need_filter: bool = False,
-    limit: int = settings.profile_service.limit_matched_profiles,
+    limit: int = settings.deck.limit_matched_profiles,
 ):
-    preferences = await get_profile_preferences(profile_id)
-    candidate_profiles = await get_candidate_profiles(
-        preferences,
-        need_filter=need_filter,
-        limit=limit,
+    preferences_model = await preference_crud.get_preference_by_profile_id(
+        session=session, profile_id=profile_id
+    )
+
+    preferences = PreferenceBase(**preferences_model.__dict__)
+    candidate_profiles = await profile_crud.get_matching_profiles(
+        session, profile_id, preferences, limit=limit
     )
     candidates = await convert_to_model(
         candidate_profiles,
