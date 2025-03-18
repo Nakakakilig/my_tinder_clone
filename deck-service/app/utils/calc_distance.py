@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 
 def calc_distance_in_query(current_profile: "Profile", Profile: "Profile"):
+    # TODO: add PostGis instead of raw SQL
     distance_expr = func.round(
         cast(
             6371  # radius of the earth in km
