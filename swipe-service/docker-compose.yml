@@ -1,0 +1,10 @@
+services:
+
+  pg-deck:
+    image: postgres
+    environment:
+      POSTGRES_DB: swipe
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"  # 5434 host, 5432 container
