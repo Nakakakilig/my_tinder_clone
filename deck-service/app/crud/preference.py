@@ -27,3 +27,11 @@ async def get_all_preferences(session: AsyncSession) -> Sequence[Preference]:
 async def get_preference(session: AsyncSession, preference_id: int) -> Preference:
     preference = await session.get(Preference, preference_id)
     return preference
+
+
+async def get_preference_by_profile_id(
+    session: AsyncSession, profile_id: int
+) -> Preference:
+    stmt = select(Preference).where(Preference.profile_id == profile_id)
+    result = await session.scalars(stmt)
+    return result.one_or_none()
