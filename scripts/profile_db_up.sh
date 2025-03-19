@@ -15,7 +15,7 @@ docker compose up -d
 
 
 echo -e "\nRun alembic upgrade head ..."
-cd app
+cd app_new
 sleep 3
 alembic upgrade head
 
