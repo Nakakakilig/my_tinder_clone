@@ -4,22 +4,22 @@ from domain.enums import EventType, Gender
 from pydantic import BaseModel
 
 
-class PreferenceBase(BaseModel):
+class PreferenceBaseSchema(BaseModel):
     profile_id: int
     gender: Gender
     age: int
     radius: int
 
 
-class PreferenceCreate(PreferenceBase):
+class PreferenceCreateSchema(PreferenceBaseSchema):
     pass
 
 
-class PreferenceRead(PreferenceBase):
+class PreferenceReadSchema(PreferenceBaseSchema):
     id: int
     updated_at: datetime
 
 
-class PreferenceCreatedEvent(PreferenceBase):
+class PreferenceCreatedEvent(PreferenceBaseSchema):
     event_type: str = EventType.PREFERENCE_CREATED.value
     occurred_at: datetime

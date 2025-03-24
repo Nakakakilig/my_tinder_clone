@@ -1,7 +1,7 @@
 import asyncio
 import random
 
-from application.schemas.preference import PreferenceCreate
+from application.schemas.preference import PreferenceCreateSchema
 from domain.enums import Gender
 from infrastructure.db.db_helper import db_helper
 from presentation.dependencies.preference import get_preference_service
@@ -12,7 +12,7 @@ async def create_multiple_preferences(
     N_preferences: int = 100,
 ):
     preferences_creates = [
-        PreferenceCreate(
+        PreferenceCreateSchema(
             profile_id=i,
             gender=random.choice(list(Gender)),
             age=random.randint(18, 60),
