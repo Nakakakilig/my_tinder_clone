@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from application.schemas.profile import ProfileBaseSchema, ProfileCreatedEvent
+from application.schemas.profile import ProfileCreateSchema
+from config.settings import settings
 from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.kafka.producer import KafkaProducer
-from config.settings import settings
 
 
 class ProfileService:
@@ -18,10 +18,12 @@ class ProfileService:
 
     async def create_profile(self, profile: Profile) -> Profile:
         profile = await self.profile_repository.create_profile(profile)
-        event = ProfileCreatedEvent(
-            **ProfileBaseSchema.model_validate(profile.__dict__).model_dump(),
-            occurred_at=datetime.now(),
-        )
+        profile_data = ProfileCreateSchema.model_validate(profile.__dict__).model_dump()
+        event = {
+            "event_type": "profile_created",
+            "data": profile_data,
+            "timestamp": datetime.now().isoformat(),
+        }
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return profile
 

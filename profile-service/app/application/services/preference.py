@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from application.schemas.preference import PreferenceCreatedEvent
+from application.schemas.preference import PreferenceCreateSchema
+from config.settings import settings
 from domain.models.preference import Preference
 from domain.repositories.preference import IPreferenceRepository
 from infrastructure.kafka.producer import KafkaProducer
@@ -17,10 +18,16 @@ class PreferenceService:
 
     async def create_preference(self, preference: Preference) -> Preference:
         preference = await self.preference_repository.create_preference(preference)
-        event = PreferenceCreatedEvent(
-            **preference.model_dump(), occurred_at=datetime.now()
-        )
-        await self.kafka_producer.send_event(event)
+        preference_data = PreferenceCreateSchema.model_validate(
+            preference.__dict__
+        ).model_dump()
+
+        event = {
+            "event_type": "preference_created",
+            "data": preference_data,
+            "timestamp": datetime.now().isoformat(),
+        }
+        await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return preference
 
     async def get_preference_by_id(self, preference_id: int) -> Preference:
