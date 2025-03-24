@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from domain.enums import EventType, Gender
+from domain.enums import Gender
 from pydantic import BaseModel
 
 
@@ -18,8 +18,3 @@ class PreferenceCreateSchema(PreferenceBaseSchema):
 class PreferenceReadSchema(PreferenceBaseSchema):
     id: int
     updated_at: datetime
-
-
-class PreferenceCreatedEvent(PreferenceBaseSchema):
-    event_type: str = EventType.PREFERENCE_CREATED.value
-    occurred_at: datetime
