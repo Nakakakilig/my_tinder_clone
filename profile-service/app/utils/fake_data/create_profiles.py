@@ -2,10 +2,12 @@ import asyncio
 import random
 
 from application.schemas.profile import ProfileCreateSchema
+from application.services.profile import ProfileService
 from domain.enums import Gender
 from faker import Faker
 from infrastructure.db.db_helper import db_helper
-from presentation.dependencies.profile import get_profile_service
+from infrastructure.kafka.init import get_kafka_producer
+from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
 
 fake = Faker("uk_UA")
 
@@ -17,7 +19,6 @@ BOTTOM_LEFT_LONGITUDE = 40.12
 
 
 async def create_multiple_profiles(
-    # producer: AIOKafkaProducer,
     N_profiles: int = 100,
 ):
     profile_creates = [
@@ -33,17 +34,16 @@ async def create_multiple_profiles(
         for i in range(1, N_profiles + 1)
     ]
 
+    print(f" Create {len(profile_creates)} profiles. Now save it to db...")
     await asyncio.sleep(5)
 
-    async for session in db_helper.session_getter():
-        for profile_create in profile_creates:
-            await get_profile_service(session).create_profile(profile_create)
-
-            # await sync_with_deck_service(
-            #     producer,
-            #     event_type="profile_created",
-            #     data={**profile_create.model_dump()},
-            #     topic="profile-events",
-            # )
+    kafka_producer = get_kafka_producer()
+    for profile_create in profile_creates:
+        async for session in db_helper.session_getter():
+            profile_service = ProfileService(
+                profile_repository=ProfileRepositoryImpl(session),
+                kafka_producer=kafka_producer,
+            )
+            await profile_service.create_profile(profile_create)
 
     print(f"Created {N_profiles} profiles")
