@@ -14,6 +14,8 @@ else
     docker compose down
     docker compose up -d
 
+    sleep 10
+
     docker exec -it kafka-kafka-1 kafka-topics \
         --create --topic profile-events \
         --bootstrap-server localhost:9092 \
