@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from domain.enums import EventType, Gender
+from domain.enums import Gender
 from pydantic import BaseModel
 
 
@@ -22,8 +22,3 @@ class ProfileReadSchema(ProfileBaseSchema):
     id: int
     created_at: datetime
     updated_at: datetime
-
-
-class ProfileCreatedEvent(ProfileBaseSchema):
-    event_type: str = EventType.PROFILE_CREATED.value
-    occurred_at: datetime
