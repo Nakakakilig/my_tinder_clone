@@ -25,6 +25,7 @@ async def handle_event(event: Event):
     if not event_type or not data:
         return
 
+    # todo: bad code (hardcoded) (letter O in SOLID)
     if event_type == "profile_created":
         await handle_profile_created(data=data)
     elif event_type == "preference_created":
