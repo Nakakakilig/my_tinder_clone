@@ -2,7 +2,7 @@ random_username=$(date +%s)
 
 user_id=$(
   curl -X 'POST' \
-  'http://0.0.0.0:8000/api/users/create' \
+  'http://0.0.0.0:8000/api/users/' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
