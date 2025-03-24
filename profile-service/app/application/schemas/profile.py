@@ -4,7 +4,7 @@ from domain.enums import EventType, Gender
 from pydantic import BaseModel
 
 
-class ProfileBase(BaseModel):
+class ProfileBaseSchema(BaseModel):
     user_id: int
     first_name: str
     last_name: str
@@ -14,16 +14,16 @@ class ProfileBase(BaseModel):
     geo_longitude: float
 
 
-class ProfileCreate(ProfileBase):
+class ProfileCreateSchema(ProfileBaseSchema):
     pass
 
 
-class ProfileRead(ProfileBase):
+class ProfileReadSchema(ProfileBaseSchema):
     id: int
     created_at: datetime
     updated_at: datetime
 
 
-class ProfileCreatedEvent(ProfileBase):
+class ProfileCreatedEvent(ProfileBaseSchema):
     event_type: str = EventType.PROFILE_CREATED.value
     occurred_at: datetime
