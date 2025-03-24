@@ -1,7 +1,7 @@
 import asyncio
 import random
 
-from application.schemas.profile import ProfileCreate
+from application.schemas.profile import ProfileCreateSchema
 from domain.enums import Gender
 from faker import Faker
 from infrastructure.db.db_helper import db_helper
@@ -21,7 +21,7 @@ async def create_multiple_profiles(
     N_profiles: int = 100,
 ):
     profile_creates = [
-        ProfileCreate(
+        ProfileCreateSchema(
             user_id=i,
             first_name=fake.first_name(),
             last_name=fake.last_name(),
