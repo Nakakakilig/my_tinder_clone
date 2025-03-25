@@ -1,5 +1,5 @@
-from app.core.schemas.deck import MatchCard
-from app.core.schemas.profile import ProfileWithDistance
+from application.schemas.deck import MatchCard
+from application.schemas.profile import ProfileWithDistance
 
 
 async def convert_to_model(
