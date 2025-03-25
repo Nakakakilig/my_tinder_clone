@@ -34,7 +34,6 @@ async def create_multiple_profiles(
         for i in range(1, N_profiles + 1)
     ]
 
-    print(f" Create {len(profile_creates)} profiles. Now save it to db...")
     await asyncio.sleep(5)
 
     kafka_producer = get_kafka_producer()

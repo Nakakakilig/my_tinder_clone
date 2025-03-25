@@ -23,7 +23,6 @@ async def create_multiple_preferences(
     ]
 
     await asyncio.sleep(5)
-    print(f"Create {len(preferences_creates)} preferences. Now save it to db...")
 
     kafka_producer = get_kafka_producer()
     for preference_create in preferences_creates:
