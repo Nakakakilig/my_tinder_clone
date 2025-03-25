@@ -1,8 +1,7 @@
 from datetime import datetime
 
+from domain.enums import Gender
 from pydantic import BaseModel
-
-from .enums import Gender
 
 
 class PreferenceBase(BaseModel):
