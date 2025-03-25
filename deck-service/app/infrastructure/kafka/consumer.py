@@ -5,8 +5,8 @@ from time import sleep
 from aiokafka import AIOKafkaConsumer
 from aiokafka.errors import KafkaConnectionError
 
-from app.core.config import settings
-from app.kafka.events import handle_event
+from config.settings import settings
+from infrastructure.kafka.events import handle_event
 
 
 async def consume():
