@@ -1,17 +1,10 @@
-from typing import AsyncGenerator
-
 from application.services.preference import PreferenceService
 from fastapi import Depends
-from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.init import get_kafka_producer
 from infrastructure.kafka.producer import KafkaProducer
 from infrastructure.repositories_impl.preference import PreferenceRepositoryImpl
+from presentation.dependencies.db_session import get_db_session
 from sqlalchemy.ext.asyncio import AsyncSession
-
-
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
-    async for session in db_helper.session_getter():
-        yield session
 
 
 def get_preference_service(
