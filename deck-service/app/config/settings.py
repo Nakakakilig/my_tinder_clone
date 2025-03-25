@@ -8,6 +8,7 @@ load_dotenv()
 class ApiPrefix(BaseModel):
     prefix: str = "/api"
     decks: str = "/decks"
+    profiles: str = "/profiles"
 
 
 class RunConfig(BaseModel):
@@ -33,6 +34,11 @@ class KafkaConfig(BaseModel):
     profile_topic: str = "profile-events"
 
 
+class RedisConfig(BaseModel):
+    url: str
+    expire: int = 3600
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(
@@ -48,6 +54,7 @@ class Settings(BaseSettings):
     deck: DeckConfig = DeckConfig()
     db: DatabaseConfig
     kafka: KafkaConfig = KafkaConfig()
+    redis: RedisConfig
 
 
 settings = Settings()
