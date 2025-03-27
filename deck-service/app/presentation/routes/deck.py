@@ -1,53 +1,52 @@
-from fastapi import APIRouter  # , HTTPException
-
-# import app.crud.preference as preference_crud
-# import app.crud.profile as profile_crud
-# from app.api.deps import db_dependency, deck_dependency
-# from app.core.config import settings
-# from app.core.schemas.deck import MatchDeck
-# from app.core.schemas.preferences import PreferenceBase
-# from app.services.profile_client import convert_to_model
+from domain.models.deck import MatchDeck
+from application.services.deck import DeckService
+from config.settings import settings
+from fastapi import APIRouter, Depends, HTTPException, status
+from presentation.dependencies.deck import get_deck_service
 
 router = APIRouter(tags=["decks"])
 
 
-@router.post("/{profile_id}/refresh")  # , response_model=MatchDeck)
-async def generate_deck(profile_id: int):
-    return {"message": f"Genarate deck for profile {profile_id}"}
+@router.get("/", response_model=list[MatchDeck])
+async def get_all_decks(
+    deck_service: DeckService = Depends(get_deck_service),
+):
+    return await deck_service.get_all_decks()
 
 
-#     session: db_dependency,
-#     profile_id: int,
-#     cache: deck_dependency,
-#     limit: int = settings.deck.limit_matched_profiles,
-# ):
-#     preferences_model = await preference_crud.get_preference_by_profile_id(
-#         session=session, profile_id=profile_id
-#     )
+@router.get("/{profile_id}", response_model=MatchDeck)
+async def get_deck(
+    profile_id: int, deck_service: DeckService = Depends(get_deck_service)
+):
+    try:
+        return await deck_service.get_deck(profile_id)
 
-#     preferences = PreferenceBase(**preferences_model.__dict__)
-#     candidate_profiles = await profile_crud.get_matching_profiles(
-#         session, profile_id, preferences, limit=limit
-#     )
-#     candidates = await convert_to_model(
-#         candidate_profiles,
-#     )
-
-#     deck = MatchDeck(profile_id=profile_id, candidates=candidates)
-#     await cache.set_deck(profile_id, deck.model_dump())
-
-#     return deck
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
-@router.get("/{profile_id}")  # , response_model=MatchDeck)
-async def get_deck(profile_id):
-    return {"message": f"Deck for profile {profile_id} "}
-    # profile_id: int, cache: deck_dependency):
-    # deck_data = await cache.get_deck(profile_id)
-    # if deck_data is None:
-    #     raise HTTPException(
-    #         status_code=404, detail="Deck not found. Please generate a deck first."
-    #     )
+@router.post("/{profile_id}/refresh", response_model=MatchDeck)
+async def generate_deck(
+    profile_id: int,
+    limit: int = settings.deck.limit_matched_profiles,
+    deck_service: DeckService = Depends(get_deck_service),
+):
+    try:
+        return await deck_service.generate_deck(profile_id, limit)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-    # deck = MatchDeck(**deck_data)
-    # return deck
+
+@router.delete("/cache")
+async def clear_all_deck_cache(
+    deck_service: DeckService = Depends(get_deck_service),
+) -> None:
+    await deck_service.clear_all_deck_cache()
+
+
+@router.delete("/cache/{profile_id}")
+async def clear_deck_cache(
+    profile_id: int,
+    deck_service: DeckService = Depends(get_deck_service),
+) -> None:
+    await deck_service.clear_deck_cache(profile_id)
