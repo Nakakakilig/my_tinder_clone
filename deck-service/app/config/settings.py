@@ -19,6 +19,7 @@ class RunConfig(BaseModel):
 
 class DeckConfig(BaseModel):
     limit_matched_profiles: int = 15
+    age_range: int = 3
 
 
 class DatabaseConfig(BaseModel):
