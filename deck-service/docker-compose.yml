@@ -8,3 +8,8 @@ services:
       POSTGRES_PASSWORD: ${APP_CONFIG__DB__PASSWORD}
     ports:
       - "${APP_CONFIG__DB__PORT}:5432"  # X host, 5432 container
+
+  redis-deck:
+    image: redis
+    ports:
+      - "${APP_CONFIG__REDIS__PORT}:6379"  # X host, 6379 container
