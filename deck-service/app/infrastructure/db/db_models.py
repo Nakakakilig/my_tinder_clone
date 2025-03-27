@@ -22,7 +22,7 @@ class ProfileORM(Base):
     )
 
     preference: Mapped["PreferenceORM"] = relationship(
-        back_populates="profile", uselist=False
+        back_populates="profile", uselist=False, lazy="selectin"
     )
 
 
