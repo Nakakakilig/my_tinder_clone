@@ -1,6 +1,7 @@
 from config.settings import settings
 from fastapi import APIRouter
 from presentation.routes.deck import router as deck_router
+from presentation.routes.preference import router as preference_router
 from presentation.routes.profile import router as profile_router
 
 router = APIRouter(
@@ -15,4 +16,9 @@ router.include_router(
 router.include_router(
     profile_router,
     prefix=settings.api.profiles,
+)
+
+router.include_router(
+    preference_router,
+    prefix=settings.api.preferences,
 )
