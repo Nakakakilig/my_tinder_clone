@@ -1,23 +1,22 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from presentation.dependencies.db_session import db_dependency
 from application.schemas.profile import ProfileRead
+from application.services.profile import ProfileService
+from presentation.dependencies.profile import get_profile_service
 
 router = APIRouter(tags=["profiles"])
 
 
-@router.get("/")  # , response_model=list[ProfileRead])
+@router.get("/", response_model=list[ProfileRead])
 async def get_profiles(
-    session: db_dependency,
+    profile_service: ProfileService = Depends(get_profile_service),
 ):
-    return {"message": "Get all profiles"}
-    # return await profiles_crud.get_all_profiles(session)
+    return await profile_service.get_profiles()
 
 
-@router.get("/{profile_id}")  # , response_model=ProfileRead)
+@router.get("/{profile_id}", response_model=ProfileRead)
 async def get_profile(
-    session: db_dependency,
     profile_id: int,
+    profile_service: ProfileService = Depends(get_profile_service),
 ) -> ProfileRead:
-    return {"message": f"Get profile {profile_id}"}
-    # return await profiles_crud.get_profile(session, profile_id)
+    return await profile_service.get_profile_by_id(profile_id)
