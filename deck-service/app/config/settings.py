@@ -9,6 +9,7 @@ class ApiPrefix(BaseModel):
     prefix: str = "/api"
     decks: str = "/decks"
     profiles: str = "/profiles"
+    preferences: str = "/preferences"
 
 
 class RunConfig(BaseModel):
