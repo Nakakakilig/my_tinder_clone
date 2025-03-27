@@ -14,3 +14,6 @@ class ProfileService:
 
     async def get_profiles(self) -> list[Profile]:
         return await self.profile_repository.get_profiles()
+
+    async def create_profile(self, profile: Profile) -> Profile | None:
+        return await self.profile_repository.create_profile(profile)
