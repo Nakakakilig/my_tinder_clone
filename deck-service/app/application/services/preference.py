@@ -17,3 +17,6 @@ class PreferenceService:
 
     async def get_preferences(self) -> list[Preference]:
         return await self.preference_repository.get_preferences()
+
+    async def create_preference(self, preference: Preference) -> Preference | None:
+        return await self.preference_repository.create_preference(preference)
