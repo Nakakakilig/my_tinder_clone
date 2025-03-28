@@ -1,16 +1,15 @@
 from abc import ABC, abstractmethod
-from domain.models.user import User
 
 
 class IUserRepository(ABC):
     @abstractmethod
-    async def get_user_by_id(self, user_id: int) -> User | None:
+    async def get_user_by_id(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def create_user(self, user: User) -> User:
+    async def create_user(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_users(self) -> list[User]:
+    async def get_users(self):
         raise NotImplementedError
