@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Numeric, cast, func
 
 if TYPE_CHECKING:
-    from app.core.models.profile import Profile
+    from domain.models.profile import Profile
 
 
 def calc_distance_in_query(current_profile: "Profile", Profile: "Profile"):
