@@ -1,21 +1,19 @@
 from abc import ABC, abstractmethod
-from domain.models.profile import Profile
 
 
 class IProfileRepository(ABC):
     @abstractmethod
-    async def get_profile_by_id(self, profile_id: int) -> Profile | None:
+    async def get_profile_by_id(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def create_profile(self, profile: Profile) -> Profile:
-        # TODO: but in fact it return ProfileORM
+    async def create_profile(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_profile_by_user_id(self, user_id: int) -> Profile | None:
+    async def get_profile_by_user_id(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_profiles(self) -> list[Profile]:
+    async def get_profiles(self):
         raise NotImplementedError
