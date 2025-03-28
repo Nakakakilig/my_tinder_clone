@@ -1,9 +1,9 @@
 import asyncio
 import random
 
-import app.crud.swipe as swipe_crud
-from app.core.db.db_helper import db_helper
-from app.core.schemas.swipe import SwipeCreate
+from application.schemas.swipe import SwipeCreateSchema
+from infrastructure.db.db_helper import db_helper
+from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
 
 
 async def create_swipes_between_profiles(N_profiles: int = 100):
@@ -33,7 +33,7 @@ async def create_swipes_between_profiles(N_profiles: int = 100):
             # if profile_j likes profile_i and decision_2 is defined, add this record
             if decision_2 is not None:
                 swipe_creates.append(
-                    SwipeCreate(
+                    SwipeCreateSchema(
                         profile_id_1=i,
                         profile_id_2=j,
                         decision_1=decision_1,
@@ -43,7 +43,7 @@ async def create_swipes_between_profiles(N_profiles: int = 100):
             # if only decision_1 is set, add only it
             else:
                 swipe_creates.append(
-                    SwipeCreate(
+                    SwipeCreateSchema(
                         profile_id_1=i,
                         profile_id_2=j,
                         decision_1=decision_1,
@@ -54,6 +54,6 @@ async def create_swipes_between_profiles(N_profiles: int = 100):
 
     async for session in db_helper.session_getter():
         for swipe_create in swipe_creates:
-            await swipe_crud.create_swipe(session, swipe_create)
+            await SwipeRepositoryImpl(session).create_swipe(swipe_create)
 
     print(f"Created {len(swipe_creates)} swipes")
