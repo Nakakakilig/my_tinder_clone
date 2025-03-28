@@ -1,4 +1,4 @@
-from domain.models.profile import Profile
+from application.schemas.profile import ProfileCreateSchema
 from domain.repositories.profile import IProfileRepository
 from infrastructure.db.db_models import ProfileORM
 from sqlalchemy import select
@@ -19,7 +19,7 @@ class ProfileRepositoryImpl(IProfileRepository):
         result = await self.db_session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def create_profile(self, profile: Profile) -> ProfileORM:
+    async def create_profile(self, profile: ProfileCreateSchema) -> ProfileORM:
         profile_orm = ProfileORM(**profile.model_dump())
         self.db_session.add(profile_orm)
         await self.db_session.commit()
