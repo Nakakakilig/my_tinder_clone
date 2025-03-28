@@ -34,4 +34,4 @@ class KafkaProducer:
     async def send_event(self, topic: str, event: BaseModel):
         if not self._producer:
             await self.start()
-        await self.producer.send(topic, event)
+        await self.producer.send_and_wait(topic, event)
