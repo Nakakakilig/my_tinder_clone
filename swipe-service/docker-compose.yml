@@ -3,8 +3,8 @@ services:
   pg-deck:
     image: postgres
     environment:
-      POSTGRES_DB: swipe
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${APP_CONFIG__DB__NAME}
+      POSTGRES_USER: ${APP_CONFIG__DB__USER}
+      POSTGRES_PASSWORD: ${APP_CONFIG__DB__PASSWORD}
     ports:
-      - "5434:5432"  # 5434 host, 5432 container
+      - "${APP_CONFIG__DB__PORT}:5432"
