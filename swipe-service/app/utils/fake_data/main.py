@@ -1,6 +1,6 @@
 import asyncio
 
-from app.utils.fake_data.create_swipes import create_swipes_between_profiles
+from .create_swipes import create_swipes_between_profiles
 
 N_PROFILES = 100
 
