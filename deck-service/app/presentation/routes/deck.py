@@ -19,7 +19,7 @@ async def get_deck(
     profile_id: int, deck_service: DeckService = Depends(get_deck_service)
 ):
     try:
-        return await deck_service.get_deck(profile_id)
+        return await deck_service.get_deck_by_id(profile_id)
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -32,7 +32,7 @@ async def generate_deck(
     deck_service: DeckService = Depends(get_deck_service),
 ):
     try:
-        return await deck_service.generate_deck(profile_id, limit)
+        return await deck_service.generate_deck_by_id(profile_id, limit)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
@@ -49,4 +49,4 @@ async def clear_deck_cache(
     profile_id: int,
     deck_service: DeckService = Depends(get_deck_service),
 ) -> None:
-    await deck_service.clear_deck_cache(profile_id)
+    await deck_service.clear_deck_cache_by_id(profile_id)
