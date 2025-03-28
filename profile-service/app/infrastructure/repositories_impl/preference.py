@@ -1,4 +1,4 @@
-from domain.models.preference import Preference
+from application.schemas.preference import PreferenceCreateSchema
 from domain.repositories.preference import IPreferenceRepository
 from infrastructure.db.db_models import PreferenceORM
 from sqlalchemy import select
@@ -21,7 +21,9 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
         result = await self.db_session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def create_preference(self, preference: Preference) -> PreferenceORM:
+    async def create_preference(
+        self, preference: PreferenceCreateSchema
+    ) -> PreferenceORM:
         preference_orm = PreferenceORM(**preference.model_dump())
         self.db_session.add(preference_orm)
         await self.db_session.commit()
