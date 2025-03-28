@@ -1,11 +1,10 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
+from config.settings import settings
 from fastapi import FastAPI
-
-from app.api.main import router
-from app.core.config import settings
-from app.core.db.db_helper import db_helper
+from infrastructure.db.db_helper import db_helper
+from presentation.routes.main import router
 
 
 @asynccontextmanager
@@ -25,7 +24,7 @@ app.include_router(
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app.main:app",
+        "main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
