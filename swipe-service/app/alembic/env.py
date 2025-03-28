@@ -1,6 +1,4 @@
 import asyncio
-import os
-import sys
 from logging.config import fileConfig
 
 from alembic import context
@@ -8,11 +6,10 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from app.core.models.swipe import Swipe  # noqa: F401
-from app.core.db.base import Base
-from app.core.config import settings
+from infrastructure.db.db_models import SwipeORM  # noqa: F401
+from infrastructure.db.base import Base
+from config.settings import settings
 
 config = context.config
 
