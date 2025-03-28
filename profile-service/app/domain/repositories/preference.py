@@ -1,20 +1,19 @@
 from abc import ABC, abstractmethod
-from domain.models.preference import Preference
 
 
 class IPreferenceRepository(ABC):
     @abstractmethod
-    async def get_preference_by_id(self, preference_id: int) -> Preference | None:
+    async def get_preference_by_id(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def create_preference(self, preference: Preference) -> Preference:
+    async def create_preference(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_preference_by_profile_id(self, profile_id: int) -> Preference | None:
+    async def get_preference_by_profile_id(self):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_preferences(self) -> list[Preference]:
+    async def get_preferences(self):
         raise NotImplementedError
