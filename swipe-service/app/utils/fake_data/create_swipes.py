@@ -6,14 +6,14 @@ from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
 
 
-async def create_swipes_between_profiles(N_profiles: int = 100):
+async def create_swipes_between_profiles(n_profiles: int = 100):
     swipe_creates = []
 
-    decisions = {i: {} for i in range(1, N_profiles + 1)}
+    decisions = {i: {} for i in range(1, n_profiles + 1)}
 
-    for i in range(1, N_profiles + 1):  # for each profile
+    for i in range(1, n_profiles + 1):  # for each profile
         # Choose random profiles for swipes, excluding the current profile
-        other_profiles = [x for x in range(1, N_profiles + 1) if x != i]
+        other_profiles = [x for x in range(1, n_profiles + 1) if x != i]
         # choose random number of swipes
         num_swipes = random.randint(2, len(other_profiles))
         # choose random profiles for swipes
