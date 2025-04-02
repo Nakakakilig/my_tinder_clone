@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from presentation.routes.swipe import router as swipe_router
 from config.settings import settings
+from presentation.routes.swipe import router as swipe_router
 
 router = APIRouter(
     prefix=settings.api.prefix,

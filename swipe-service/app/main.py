@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from config.settings import settings
 from fastapi import FastAPI
+
+from config.settings import settings
 from infrastructure.db.db_helper import db_helper
 from presentation.routes.main import router
 

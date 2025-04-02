@@ -1,8 +1,9 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from application.schemas.swipe import SwipeCreateSchema
 from domain.repositories.swipe import ISwipeRepository
 from infrastructure.db.db_models import SwipeORM
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class SwipeRepositoryImpl(ISwipeRepository):
@@ -29,10 +30,7 @@ class SwipeRepositoryImpl(ISwipeRepository):
     ) -> list[SwipeORM] | None:
         stmt = (
             select(SwipeORM)
-            .where(
-                (SwipeORM.profile_id_1 == profile_id)
-                | (SwipeORM.profile_id_2 == profile_id)
-            )
+            .where((SwipeORM.profile_id_1 == profile_id) | (SwipeORM.profile_id_2 == profile_id))
             .order_by(SwipeORM.id.desc())
             .limit(limit)
             .offset(offset)
@@ -44,14 +42,8 @@ class SwipeRepositoryImpl(ISwipeRepository):
         self, profile_id_1: int, profile_id_2: int
     ) -> SwipeORM | None:
         stmt = select(SwipeORM).where(
-            (
-                (SwipeORM.profile_id_1 == profile_id_1)
-                & (SwipeORM.profile_id_2 == profile_id_2)
-            )
-            | (
-                (SwipeORM.profile_id_1 == profile_id_2)
-                & (SwipeORM.profile_id_2 == profile_id_1)
-            )
+            ((SwipeORM.profile_id_1 == profile_id_1) & (SwipeORM.profile_id_2 == profile_id_2))
+            | ((SwipeORM.profile_id_1 == profile_id_2) & (SwipeORM.profile_id_2 == profile_id_1))
         )
         result = await self.db_session.execute(stmt)
         return result.scalar_one_or_none()
