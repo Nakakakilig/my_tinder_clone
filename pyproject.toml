@@ -25,6 +25,9 @@ target-version = "py312"
 select = ["E", "F", "I", "N", "W", "B", "UP", "RUF"]
 ignore = []
 
+[tool.ruff.per-file-ignores]
+"*/alembic/**/*" = ["ALL"]
+
 [tool.ruff.isort]
 known-first-party = ["application", "config", "domain", "infrastructure", "presentation", "utils"]
 known-third-party = ["faker", "fastapi", "httpx", "redis", "sqlalchemy[asyncio]", "uvicorn"]
