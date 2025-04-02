@@ -57,3 +57,4 @@ async def create_swipes_between_profiles(n_profiles: int = 100):
             await SwipeRepositoryImpl(session).create_swipe(swipe_create)
 
     print(f"Created {len(swipe_creates)} swipes")
+    return
