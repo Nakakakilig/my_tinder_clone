@@ -18,3 +18,16 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0.38",
     "uvicorn>=0.34.0",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "N", "W", "B", "UP", "RUF"]
+ignore = []
+
+[tool.ruff.isort]
+known-first-party = ["application", "config", "domain", "infrastructure", "presentation", "utils"]
+known-third-party = ["faker", "fastapi", "httpx", "redis", "sqlalchemy[asyncio]", "uvicorn"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+combine-as-imports = true
+split-on-trailing-comma = true
