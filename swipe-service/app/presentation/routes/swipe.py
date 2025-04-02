@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, Query
 
 from application.schemas.swipe import SwipeCreateSchema, SwipeReadSchema
@@ -9,9 +11,9 @@ router = APIRouter(tags=["swipes"])
 
 @router.get("/")
 async def get_swipes(
+    swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
     limit: int = Query(default=10, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
-    swipe_service: SwipeService = Depends(get_swipe_service),
 ) -> list[SwipeReadSchema]:
     return await swipe_service.get_swipes(limit, offset)
 
@@ -19,7 +21,7 @@ async def get_swipes(
 @router.post("/")
 async def create_swipe(
     swipe: SwipeCreateSchema,
-    swipe_service: SwipeService = Depends(get_swipe_service),
+    swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
 ) -> SwipeReadSchema:
     return await swipe_service.create_swipe(swipe)
 
@@ -27,9 +29,9 @@ async def create_swipe(
 @router.get("/profile/{profile_id}/")
 async def get_swipes_by_profile_id(
     profile_id: int,
+    swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
     limit: int = Query(default=10, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
-    swipe_service: SwipeService = Depends(get_swipe_service),
 ) -> list[SwipeReadSchema]:
     """Get all swipes associated with a profile ID."""
     return await swipe_service.get_swipes_by_profile_id(profile_id, limit, offset)
