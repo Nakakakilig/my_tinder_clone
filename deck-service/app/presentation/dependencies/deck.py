@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,8 +11,8 @@ from presentation.dependencies.db_session import get_db_session
 
 
 def get_deck_service(
-    db_session: AsyncSession = Depends(get_db_session),
-    cache: ICache = Depends(get_cache),
+    db_session: Annotated[AsyncSession, Depends(get_db_session)],
+    cache: Annotated[ICache, Depends(get_cache)],
 ) -> DeckService:
     deck_repository = DeckRepositoryImpl(db_session, cache)
     return DeckService(deck_repository)

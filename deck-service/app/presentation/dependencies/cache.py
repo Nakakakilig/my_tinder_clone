@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from typing import Annotated
 
 from fastapi import Depends
 from redis import asyncio as aioredis
@@ -16,6 +17,6 @@ async def get_redis_client() -> AsyncGenerator[aioredis.Redis, None]:
         await redis.close()
 
 
-def get_cache(redis_client: aioredis.Redis = Depends(get_redis_client)) -> ICache:
+def get_cache(redis_client: Annotated[aioredis.Redis, Depends(get_redis_client)]) -> ICache:
     # return CacheFactory.create_memory_cache()
     return CacheFactory.create_redis_cache(redis_client)
