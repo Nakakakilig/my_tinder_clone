@@ -1,7 +1,7 @@
 __all__ = (
-    "Profile",
-    "Preference",
     # "Photo",
+    "Preference",
+    "Profile",
 )
 
 
