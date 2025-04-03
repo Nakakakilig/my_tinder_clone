@@ -9,7 +9,7 @@ class ICache(ABC):
         pass
 
     @abstractmethod
-    async def set(self, key: str, value: Any, expire: int = None) -> None:
+    async def set(self, key: str, value: Any, expire: int | None = None) -> None:
         """Set value in cache with optional expiration in seconds"""
         pass
 
@@ -29,11 +29,11 @@ class ICache(ABC):
         pass
 
     @abstractmethod
-    async def get_all_keys(self) -> list[str]:
+    async def get_all_keys(self) -> list[str] | None:
         """Get all keys in cache"""
         pass
 
     @abstractmethod
-    async def get_all_values(self) -> list[Any]:
+    async def get_all_values(self) -> list[Any] | None:
         """Get all values in cache"""
         pass
