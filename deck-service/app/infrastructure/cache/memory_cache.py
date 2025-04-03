@@ -7,7 +7,7 @@ from domain.repositories.cache import ICache
 
 class MemoryCache(ICache):
     def __init__(self):
-        self._cache = {}
+        self._cache: dict[str, Any] = {}
         self._lock = asyncio.Lock()
 
     async def get_all_keys(self) -> list[str]:

@@ -11,10 +11,10 @@ class RedisCache(ICache):
         self._redis = redis_client
 
     async def get_all_keys(self) -> list[str]:
-        return [key for key in await self._redis.keys("*")]
+        return [key for key in await self._redis.keys("*")]  # type: ignore
 
     async def get_all_values(self) -> list[Any]:
-        return [json.loads(await self._redis.get(key)) for key in await self._redis.keys("*")]
+        return [json.loads(await self._redis.get(key)) for key in await self._redis.keys("*")]  # type: ignore
 
     async def get(self, key: str) -> Any | None:
         value = await self._redis.get(key)
@@ -37,4 +37,4 @@ class RedisCache(ICache):
 
     async def clear(self) -> None:
         # await self._redis.flushdb()
-        [await self._redis.delete(key) for key in await self._redis.keys("*")]
+        [await self._redis.delete(key) for key in await self._redis.keys("*")]  # type: ignore
