@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class SwipeBaseSchema(BaseModel):
-    profile_id_1: int
-    profile_id_2: int
+    profile_id_1: int = Field(..., gt=0)
+    profile_id_2: int = Field(..., gt=0)
     decision_1: bool | None = None
     decision_2: bool | None = None
 
