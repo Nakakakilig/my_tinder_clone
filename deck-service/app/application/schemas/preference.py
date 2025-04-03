@@ -1,21 +1,21 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from domain.enums import Gender
 
 
-class PreferenceBase(BaseModel):
-    profile_id: int
+class PreferenceBaseSchema(BaseModel):
+    profile_id: int = Field(..., gt=0)
     gender: Gender
-    age: int
-    radius: int
+    age: int = Field(..., ge=18, le=60)
+    radius: int = Field(..., gt=0, le=400)
 
 
-class PreferenceCreate(PreferenceBase):
+class PreferenceCreateSchema(PreferenceBaseSchema):
     pass
 
 
-class PreferenceRead(PreferenceBase):
+class PreferenceReadSchema(PreferenceBaseSchema):
     id: int
     updated_at: datetime
