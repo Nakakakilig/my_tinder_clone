@@ -93,3 +93,27 @@ async def get_swipes_by_profile_id(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred",
         ) from e
+
+
+@router.get("/profile/{profile_id_1}/profile/{profile_id_2}/")
+async def get_swipe_by_two_profile_ids(
+    profile_id_1: int,
+    profile_id_2: int,
+    swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
+) -> SwipeReadSchema | None:
+    try:
+        swipe = await swipe_service.get_swipe_by_two_profile_ids(
+            profile_id_1, profile_id_2
+        )
+        if not swipe:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No swipe found for \
+                    profile {profile_id_1} and profile {profile_id_2}",
+            )
+        return swipe_to_read_schema(swipe)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred",
+        ) from e
