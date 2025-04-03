@@ -1,10 +1,11 @@
+from sqlalchemy import and_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from config.settings import settings
 from domain.models.deck import MatchCard, MatchDeck
 from domain.repositories.cache import ICache
 from domain.repositories.deck import IDeckRepository
 from infrastructure.db.db_models import ProfileORM
-from sqlalchemy import and_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 from utils.calc_distance import calc_distance_in_query
 
 

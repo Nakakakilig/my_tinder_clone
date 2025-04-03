@@ -2,6 +2,7 @@ import json
 from typing import Any
 
 from redis import asyncio as aioredis
+
 from domain.repositories.cache import ICache
 
 
@@ -13,10 +14,7 @@ class RedisCache(ICache):
         return [key for key in await self._redis.keys("*")]
 
     async def get_all_values(self) -> list[Any]:
-        return [
-            json.loads(await self._redis.get(key))
-            for key in await self._redis.keys("*")
-        ]
+        return [json.loads(await self._redis.get(key)) for key in await self._redis.keys("*")]
 
     async def get(self, key: str) -> Any | None:
         value = await self._redis.get(key)
@@ -24,7 +22,7 @@ class RedisCache(ICache):
             return None
         return json.loads(value)
 
-    async def set(self, key: str, value: Any, expire: int = None) -> None:
+    async def set(self, key: str, value: Any, expire: int | None = None) -> None:
         value_json = json.dumps(value, ensure_ascii=False)
         if expire:
             await self._redis.setex(key, expire, value_json)

@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from domain.enums import Gender
 from pydantic import BaseModel, Field
+
+from domain.enums import Gender
 
 
 class ProfileBase(BaseModel):

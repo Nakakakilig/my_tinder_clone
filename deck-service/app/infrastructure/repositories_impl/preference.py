@@ -1,8 +1,9 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from domain.models.preference import Preference
 from domain.repositories.preference import IPreferenceRepository
 from infrastructure.db.db_models import PreferenceORM
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class PreferenceRepositoryImpl(IPreferenceRepository):
@@ -21,9 +22,7 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
         result = await self.db_session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def get_preference_by_profile_id(
-        self, profile_id: int
-    ) -> PreferenceORM | None:
+    async def get_preference_by_profile_id(self, profile_id: int) -> PreferenceORM | None:
         stmt = select(PreferenceORM).where(PreferenceORM.profile_id == profile_id)
         result = await self.db_session.execute(stmt)
         return result.scalar_one_or_none()

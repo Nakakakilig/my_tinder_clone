@@ -1,4 +1,5 @@
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
+
 from fastapi import Depends
 from redis import asyncio as aioredis
 

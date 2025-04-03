@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime, timedelta
 from typing import Any
+
 from domain.repositories.cache import ICache
 
 
@@ -27,7 +28,7 @@ class MemoryCache(ICache):
 
             return value
 
-    async def set(self, key: str, value: Any, expire: int = None) -> None:
+    async def set(self, key: str, value: Any, expire: int | None = None) -> None:
         async with self._lock:
             expiry = None
             if expire:

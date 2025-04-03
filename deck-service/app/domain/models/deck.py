@@ -1,5 +1,6 @@
-from domain.enums import Gender
 from pydantic import BaseModel
+
+from domain.enums import Gender
 
 
 class MatchCard(BaseModel):  # profile card of a potential match

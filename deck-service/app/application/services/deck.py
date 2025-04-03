@@ -1,5 +1,5 @@
-from domain.repositories.deck import IDeckRepository
 from domain.models.deck import MatchDeck
+from domain.repositories.deck import IDeckRepository
 
 
 class DeckService:

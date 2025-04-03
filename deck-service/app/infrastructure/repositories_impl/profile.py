@@ -1,8 +1,9 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.db.db_models import ProfileORM
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class ProfileRepositoryImpl(IProfileRepository):

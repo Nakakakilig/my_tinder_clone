@@ -1,4 +1,5 @@
 from redis import asyncio as aioredis
+
 from domain.repositories.cache import ICache
 from infrastructure.cache.memory_cache import MemoryCache
 from infrastructure.cache.redis_cache import RedisCache
