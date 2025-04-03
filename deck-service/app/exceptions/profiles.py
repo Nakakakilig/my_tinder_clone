@@ -1,10 +1,10 @@
-class ProfileAlreadyExists(Exception):
+class ProfileAlreadyExistsError(Exception):
     pass
 
 
-class ProfileNotFound(Exception):
+class ProfileNotFoundError(Exception):
     pass
 
 
-class ProfileCreationFailed(Exception):
+class ProfileCreationFailedError(Exception):
     pass

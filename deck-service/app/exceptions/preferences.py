@@ -1,10 +1,10 @@
-class PreferenceAlreadyExists(Exception):
+class PreferenceAlreadyExistsError(Exception):
     pass
 
 
-class PreferenceNotFound(Exception):
+class PreferenceNotFoundError(Exception):
     pass
 
 
-class PreferenceCreationFailed(Exception):
+class PreferenceCreationFailedError(Exception):
     pass
