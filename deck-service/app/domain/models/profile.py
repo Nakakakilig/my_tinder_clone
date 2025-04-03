@@ -1,11 +1,11 @@
+from dataclasses import dataclass
 from datetime import datetime
-
-from pydantic import BaseModel
 
 from domain.enums import Gender
 
 
-class Profile(BaseModel):
+@dataclass
+class Profile:
     outer_id: int
     first_name: str
     last_name: str
@@ -13,5 +13,6 @@ class Profile(BaseModel):
     age: int
     geo_latitude: float
     geo_longitude: float
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    id: int | None = None
