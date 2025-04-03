@@ -1,28 +1,52 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from domain.exceptions import (
+    ProfileAlreadyExistsError,
+    ProfileCreateError,
+    ProfileNotFoundError,
+)
 from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.db.db_models import ProfileORM
+from infrastructure.mappers.profile import domain_to_orm, orm_to_domain
 
 
 class ProfileRepositoryImpl(IProfileRepository):
     def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
-    async def get_profile_by_id(self, profile_id: int) -> ProfileORM | None:
-        stmt = select(ProfileORM).where(ProfileORM.id == profile_id)
-        result = await self.db_session.execute(stmt)
-        return result.scalar_one_or_none()
+    async def get_profile_by_id(self, profile_id: int) -> Profile | None:
+        try:
+            stmt = select(ProfileORM).where(ProfileORM.outer_id == profile_id)
+            result = await self.db_session.execute(stmt)
+            profile_orm = result.scalar_one_or_none()
+            if profile_orm is None:
+                return None
+            return orm_to_domain(profile_orm)
+        except Exception as e:
+            raise ProfileNotFoundError(f"Profile {profile_id} not found") from e
 
-    async def create_profile(self, profile: Profile) -> ProfileORM:
-        profile_orm = ProfileORM(**profile.model_dump())
-        self.db_session.add(profile_orm)
-        await self.db_session.commit()
-        await self.db_session.refresh(profile_orm)
-        return profile_orm
+    async def create_profile(self, profile: Profile) -> Profile:
+        try:
+            existing_profile = await self.get_profile_by_id(profile.outer_id)
+            if existing_profile:
+                raise ProfileAlreadyExistsError(f"Profile {profile.outer_id} already exists")
+            profile_orm = domain_to_orm(profile)
+            self.db_session.add(profile_orm)
+            await self.db_session.commit()
+            await self.db_session.refresh(profile_orm)
+            return orm_to_domain(profile_orm)
+        except Exception as e:
+            raise ProfileCreateError("Profile creation failed") from e
 
-    async def get_profiles(self) -> list[ProfileORM]:
-        stmt = select(ProfileORM).order_by(ProfileORM.id)
-        result = await self.db_session.execute(stmt)
-        return result.scalars().all()
+    async def get_profiles(self) -> list[Profile] | None:
+        try:
+            stmt = select(ProfileORM).order_by(ProfileORM.id)
+            result = await self.db_session.execute(stmt)
+            profiles_orm = result.scalars().all()
+            if not profiles_orm:
+                return None
+            return [orm_to_domain(profile_orm) for profile_orm in profiles_orm]
+        except Exception as e:
+            raise ProfileNotFoundError("Profiles not found") from e

@@ -2,6 +2,13 @@ from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.settings import settings
+from domain.exceptions import (
+    CandidateNotFoundError,
+    DeckCacheError,
+    DeckGenerateError,
+    PreferenceNotFoundError,
+    ProfileNotFoundError,
+)
 from domain.models.deck import MatchCard, MatchDeck
 from domain.repositories.cache import ICache
 from domain.repositories.deck import IDeckRepository
@@ -17,26 +24,37 @@ class DeckRepositoryImpl(IDeckRepository):
     async def get_deck_by_id(self, profile_id: int) -> MatchDeck:
         deck_data = await self.cache.get(f"deck:{profile_id}")
         if not deck_data:
-            raise Exception("Deck not found in cache")
+            raise Exception(f"Deck for profile {profile_id} not found in cache")
         return MatchDeck(**deck_data)
 
-    async def generate_deck_by_id(
-        self,
-        profile_id: int,
-        limit: int,
-    ):
+    async def generate_deck_by_id(self, profile_id: int, limit: int):
         try:
             profiles_and_distance = await self._get_matching_profiles_and_distance(
                 profile_id, limit
             )
-            if not profiles_and_distance:
-                raise Exception("No candidates found")
             cards: list[MatchCard] = await self._convert_to_cards(profiles_and_distance)
             deck = MatchDeck(profile_id=profile_id, candidates=cards)
             await self.cache.set(f"deck:{profile_id}", deck.model_dump())
             return deck
+
+        except CandidateNotFoundError as e:
+            raise CandidateNotFoundError(
+                f"Error generating deck: No candidates found for profile {profile_id}"
+            ) from e
+        except ProfileNotFoundError as e:
+            raise ProfileNotFoundError(
+                f"Error generating deck: Profile {profile_id} not found"
+            ) from e
+        except PreferenceNotFoundError as e:
+            raise PreferenceNotFoundError(
+                f"Error generating deck: Preference not found for profile {profile_id}"
+            ) from e
+        except DeckCacheError as e:
+            raise DeckCacheError(
+                f"Error generating deck: Cant save deck to cache for profile {profile_id}"
+            ) from e
         except Exception as e:
-            raise Exception(f"Error generating deck: {e}")
+            raise DeckGenerateError(f"Error generating deck: {e}") from e
 
     async def clear_deck_cache_by_id(self, profile_id: int) -> None:
         await self.cache.delete(f"deck:{profile_id}")
@@ -44,6 +62,8 @@ class DeckRepositoryImpl(IDeckRepository):
 
     async def get_all_decks(self) -> list[MatchDeck]:
         decks_data = await self.cache.get_all_values()
+        if not decks_data:
+            raise Exception("No decks found in cache")
         decks = [MatchDeck(**deck_data) for deck_data in decks_data]
         sorted_decks = sorted(decks, key=lambda x: x.profile_id)
         return sorted_decks
@@ -61,12 +81,12 @@ class DeckRepositoryImpl(IDeckRepository):
         profile = result.scalars().first()
 
         if not profile:
-            raise Exception("Profile not found")
+            raise ProfileNotFoundError("Profile not found")
 
         preference = profile.preference
         if not preference:
-            raise Exception("Preference not found")
-        distance_expr = calc_distance_in_query(profile, ProfileORM)
+            raise PreferenceNotFoundError("Preference not found")
+        distance_expr = calc_distance_in_query(profile, ProfileORM)  # type: ignore
 
         filters = [
             ProfileORM.gender == preference.gender,
@@ -84,21 +104,14 @@ class DeckRepositoryImpl(IDeckRepository):
         query = query.having(distance_expr <= preference.radius)
 
         result = await self.db_session.execute(query)
-        profiles_and_distance: list[tuple[ProfileORM, float]] = result.all()
+        profiles_and_distance: list[tuple[ProfileORM, float]] = result.all()  # type: ignore
         return profiles_and_distance
 
     async def _convert_to_cards(
         self, profile_and_distance: list[tuple[ProfileORM, float]]
     ) -> list[MatchCard]:
-        cards = []
+        cards: list[MatchCard] = []
         for profile, distance in profile_and_distance:
-            profile_dict = {
-                "profile_id": profile.id,
-                "first_name": profile.first_name,
-                "last_name": profile.last_name,
-                "gender": profile.gender,
-                "age": profile.age,
-                "distance_km": float(distance),
-            }
-            cards.append(MatchCard(**profile_dict))
+            card = MatchCard(distance_km=distance, profile_id=profile.id, **profile.__dict__)
+            cards.append(card)
         return cards
