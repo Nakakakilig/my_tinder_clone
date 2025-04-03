@@ -7,9 +7,9 @@ from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
 
 
 async def create_swipes_between_profiles(n_profiles: int = 100):
-    swipe_creates = []
+    swipe_creates: list[SwipeCreateSchema] = []
 
-    decisions = {i: {} for i in range(1, n_profiles + 1)}
+    decisions: dict[int, dict[int, bool | None]] = {i: {} for i in range(1, n_profiles + 1)}
 
     for i in range(1, n_profiles + 1):  # for each profile
         # Choose random profiles for swipes, excluding the current profile
