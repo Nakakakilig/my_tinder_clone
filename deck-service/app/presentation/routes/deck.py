@@ -1,7 +1,8 @@
-from domain.models.deck import MatchDeck
+from fastapi import APIRouter, Depends, HTTPException, status
+
 from application.services.deck import DeckService
 from config.settings import settings
-from fastapi import APIRouter, Depends, HTTPException, status
+from domain.models.deck import MatchDeck
 from presentation.dependencies.deck import get_deck_service
 
 router = APIRouter(tags=["decks"])
@@ -15,9 +16,7 @@ async def get_all_decks(
 
 
 @router.get("/{profile_id}", response_model=MatchDeck)
-async def get_deck(
-    profile_id: int, deck_service: DeckService = Depends(get_deck_service)
-):
+async def get_deck(profile_id: int, deck_service: DeckService = Depends(get_deck_service)):
     try:
         return await deck_service.get_deck_by_id(profile_id)
 

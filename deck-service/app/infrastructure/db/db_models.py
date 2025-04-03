@@ -1,7 +1,8 @@
-from domain.enums import Gender
-from infrastructure.db.base import Base
 from sqlalchemy import DateTime, Enum, Float, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from domain.enums import Gender
+from infrastructure.db.base import Base
 
 
 class ProfileORM(Base):
@@ -14,9 +15,7 @@ class ProfileORM(Base):
     age: Mapped[int] = mapped_column(Integer, nullable=False)
     geo_latitude: Mapped[float] = mapped_column(Float, nullable=False)
     geo_longitude: Mapped[float] = mapped_column(Float, nullable=False)
-    created_at: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

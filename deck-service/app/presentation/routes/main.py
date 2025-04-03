@@ -1,5 +1,6 @@
-from config.settings import settings
 from fastapi import APIRouter
+
+from config.settings import settings
 from presentation.routes.deck import router as deck_router
 from presentation.routes.preference import router as preference_router
 from presentation.routes.profile import router as profile_router
