@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from application.schemas.profile import ProfileRead
@@ -9,7 +11,7 @@ router = APIRouter(tags=["profiles"])
 
 @router.get("/", response_model=list[ProfileRead])
 async def get_profiles(
-    profile_service: ProfileService = Depends(get_profile_service),
+    profile_service: Annotated[ProfileService, Depends(get_profile_service)],
 ):
     return await profile_service.get_profiles()
 
@@ -17,6 +19,6 @@ async def get_profiles(
 @router.get("/{profile_id}", response_model=ProfileRead)
 async def get_profile(
     profile_id: int,
-    profile_service: ProfileService = Depends(get_profile_service),
+    profile_service: Annotated[ProfileService, Depends(get_profile_service)],
 ) -> ProfileRead:
     return await profile_service.get_profile_by_id(profile_id)

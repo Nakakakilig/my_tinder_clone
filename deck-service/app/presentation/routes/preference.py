@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from application.schemas.preference import PreferenceRead
@@ -9,7 +11,7 @@ router = APIRouter(tags=["preferences"])
 
 @router.get("/", response_model=list[PreferenceRead])
 async def get_preferences(
-    preference_service: PreferenceService = Depends(get_preference_service),
+    preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ):
     return await preference_service.get_preferences()
 
@@ -17,7 +19,7 @@ async def get_preferences(
 @router.get("/{preference_id}", response_model=PreferenceRead)
 async def get_preference_by_id(
     preference_id: int,
-    preference_service: PreferenceService = Depends(get_preference_service),
+    preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ) -> PreferenceRead:
     return await preference_service.get_preference_by_id(preference_id)
 
@@ -25,6 +27,6 @@ async def get_preference_by_id(
 @router.get("/profile/{profile_id}", response_model=PreferenceRead)
 async def get_preference_by_profile_id(
     profile_id: int,
-    preference_service: PreferenceService = Depends(get_preference_service),
+    preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ) -> PreferenceRead:
     return await preference_service.get_preference_by_profile_id(profile_id)
