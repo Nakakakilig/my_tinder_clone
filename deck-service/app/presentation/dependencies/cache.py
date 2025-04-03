@@ -10,7 +10,7 @@ from infrastructure.cache.factory import CacheFactory
 
 
 async def get_redis_client() -> AsyncGenerator[aioredis.Redis, None]:
-    redis = await aioredis.from_url(settings.redis.url, decode_responses=True)
+    redis = await aioredis.from_url(settings.redis.url, decode_responses=True)  # type: ignore
     try:
         yield redis
     finally:
