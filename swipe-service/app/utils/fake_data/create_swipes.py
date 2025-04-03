@@ -2,6 +2,7 @@ import asyncio
 import random
 
 from application.schemas.swipe import SwipeCreateSchema
+from domain.models.swipe import Swipe
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
 
@@ -27,7 +28,7 @@ async def create_swipes_between_profiles(n_profiles: int = 100):
             # if profile_j likes profile_i, check if profile_i likes profile_j
             decision_2 = None
             if j in decisions and i in decisions[j] and decisions[j][i] is not None:
-                # if there is a like from j to i, then decision_2 will depend on the decision of j
+                # if there like from j to i, so decision_2 depend on the decision of j
                 decision_2 = random.choice([True, False])
 
             # if profile_j likes profile_i and decision_2 is defined, add this record
@@ -54,7 +55,8 @@ async def create_swipes_between_profiles(n_profiles: int = 100):
 
     async for session in db_helper.session_getter():
         for swipe_create in swipe_creates:
-            await SwipeRepositoryImpl(session).create_swipe(swipe_create)
+            swipe = Swipe(**swipe_create.model_dump())
+            await SwipeRepositoryImpl(session).create_swipe(swipe)
 
     print(f"Created {len(swipe_creates)} swipes")
     return
