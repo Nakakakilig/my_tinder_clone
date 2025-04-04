@@ -14,7 +14,7 @@ class MemoryCache(ICache):
         return list(self._cache.keys())
 
     async def get_all_values(self) -> list[Any]:
-        return [value for value in self._cache.values()]
+        return list(self._cache.values())
 
     async def get(self, key: str) -> Any | None:
         async with self._lock:

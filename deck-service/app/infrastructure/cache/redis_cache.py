@@ -11,7 +11,7 @@ class RedisCache(ICache):
         self._redis = redis_client
 
     async def get_all_keys(self) -> list[str]:
-        return [key for key in await self._redis.keys("*")]  # type: ignore
+        return list(await self._redis.keys("*"))  # type: ignore
 
     async def get_all_values(self) -> list[Any]:
         return [json.loads(await self._redis.get(key)) for key in await self._redis.keys("*")]  # type: ignore
