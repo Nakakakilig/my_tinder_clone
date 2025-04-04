@@ -36,7 +36,7 @@ class DeckRepositoryImpl(IDeckRepository):
             cards: list[MatchCard] = await self._convert_to_cards(profiles_and_distance)
             deck = MatchDeck(profile_id=profile_id, candidates=cards)
             await self.cache.set(f"deck:{profile_id}", deck.model_dump())
-            return deck
+            return deck  # noqa: TRY300
 
         except CandidateNotFoundError as e:
             raise CandidateNotFoundError(profile_id) from e
@@ -51,7 +51,7 @@ class DeckRepositoryImpl(IDeckRepository):
 
     async def clear_deck_cache_by_id(self, profile_id: int) -> None:
         await self.cache.delete(f"deck:{profile_id}")
-        return
+        return  # noqa: PLR1711
 
     async def get_all_decks(self) -> list[MatchDeck]:
         decks_data = await self.cache.get_all_values()
@@ -59,11 +59,11 @@ class DeckRepositoryImpl(IDeckRepository):
             raise DeckCacheError()
         decks = [MatchDeck(**deck_data) for deck_data in decks_data]
         sorted_decks = sorted(decks, key=lambda x: x.profile_id)
-        return sorted_decks
+        return sorted_decks  # noqa: RET504
 
     async def clear_all_deck_cache(self) -> None:
         await self.cache.clear()
-        return
+        return  # noqa: PLR1711
 
     async def _get_matching_profiles_and_distance(
         self, profile_id: int, limit: int

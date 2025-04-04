@@ -36,7 +36,7 @@ async def consume():
             consume_started = False
             print("CONSUMER CANT START. SLEEP FOR 5 SECONDS")
             # yes, its a bad practice, but i need here for easy debugging
-            sleep(5)
+            sleep(5)  # noqa: ASYNC251
 
     try:
         print("Kafka consumer started and listening...")
