@@ -4,7 +4,9 @@ repos:
     rev: v0.2.2
     hooks:
       - id: ruff
-        additional_args: ["--config=pyproject.toml", "--fix"]
+        args:
+          - --config=pyproject.toml
+          - --fix
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
