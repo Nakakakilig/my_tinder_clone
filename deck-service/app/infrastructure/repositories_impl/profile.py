@@ -25,20 +25,20 @@ class ProfileRepositoryImpl(IProfileRepository):
                 return None
             return orm_to_domain(profile_orm)
         except Exception as e:
-            raise ProfileNotFoundError(f"Profile {profile_id} not found") from e
+            raise ProfileNotFoundError(profile_id) from e
 
     async def create_profile(self, profile: Profile) -> Profile:
         try:
             existing_profile = await self.get_profile_by_id(profile.outer_id)
             if existing_profile:
-                raise ProfileAlreadyExistsError(f"Profile {profile.outer_id} already exists")
+                raise ProfileAlreadyExistsError(profile.outer_id)
             profile_orm = domain_to_orm(profile)
             self.db_session.add(profile_orm)
             await self.db_session.commit()
             await self.db_session.refresh(profile_orm)
             return orm_to_domain(profile_orm)
         except Exception as e:
-            raise ProfileCreateError("Profile creation failed") from e
+            raise ProfileCreateError() from e
 
     async def get_profiles(self) -> list[Profile] | None:
         try:
@@ -49,4 +49,4 @@ class ProfileRepositoryImpl(IProfileRepository):
                 return None
             return [orm_to_domain(profile_orm) for profile_orm in profiles_orm]
         except Exception as e:
-            raise ProfileNotFoundError("Profiles not found") from e
+            raise ProfileNotFoundError() from e
