@@ -6,6 +6,7 @@ from domain.exceptions import (
     CandidateNotFoundError,
     DeckCacheError,
     DeckGenerateError,
+    PreferenceForProfileNotFoundError,
     PreferenceNotFoundError,
     ProfileNotFoundError,
 )
@@ -24,7 +25,7 @@ class DeckRepositoryImpl(IDeckRepository):
     async def get_deck_by_id(self, profile_id: int) -> MatchDeck:
         deck_data = await self.cache.get(f"deck:{profile_id}")
         if not deck_data:
-            raise Exception(f"Deck for profile {profile_id} not found in cache")
+            raise DeckCacheError(profile_id)
         return MatchDeck(**deck_data)
 
     async def generate_deck_by_id(self, profile_id: int, limit: int):
@@ -38,23 +39,15 @@ class DeckRepositoryImpl(IDeckRepository):
             return deck
 
         except CandidateNotFoundError as e:
-            raise CandidateNotFoundError(
-                f"Error generating deck: No candidates found for profile {profile_id}"
-            ) from e
+            raise CandidateNotFoundError(profile_id) from e
         except ProfileNotFoundError as e:
-            raise ProfileNotFoundError(
-                f"Error generating deck: Profile {profile_id} not found"
-            ) from e
+            raise ProfileNotFoundError(profile_id) from e
         except PreferenceNotFoundError as e:
-            raise PreferenceNotFoundError(
-                f"Error generating deck: Preference not found for profile {profile_id}"
-            ) from e
+            raise PreferenceNotFoundError(profile_id) from e
         except DeckCacheError as e:
-            raise DeckCacheError(
-                f"Error generating deck: Cant save deck to cache for profile {profile_id}"
-            ) from e
+            raise DeckCacheError(profile_id) from e
         except Exception as e:
-            raise DeckGenerateError(f"Error generating deck: {e}") from e
+            raise DeckGenerateError(profile_id) from e
 
     async def clear_deck_cache_by_id(self, profile_id: int) -> None:
         await self.cache.delete(f"deck:{profile_id}")
@@ -63,7 +56,7 @@ class DeckRepositoryImpl(IDeckRepository):
     async def get_all_decks(self) -> list[MatchDeck]:
         decks_data = await self.cache.get_all_values()
         if not decks_data:
-            raise Exception("No decks found in cache")
+            raise DeckCacheError()
         decks = [MatchDeck(**deck_data) for deck_data in decks_data]
         sorted_decks = sorted(decks, key=lambda x: x.profile_id)
         return sorted_decks
@@ -81,11 +74,11 @@ class DeckRepositoryImpl(IDeckRepository):
         profile = result.scalars().first()
 
         if not profile:
-            raise ProfileNotFoundError("Profile not found")
+            raise ProfileNotFoundError(profile_id)
 
         preference = profile.preference
         if not preference:
-            raise PreferenceNotFoundError("Preference not found")
+            raise PreferenceForProfileNotFoundError(profile_id)
         distance_expr = calc_distance_in_query(profile, ProfileORM)  # type: ignore
 
         filters = [
