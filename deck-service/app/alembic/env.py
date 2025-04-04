@@ -3,7 +3,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from config.settings import settings
-from infrastructure.db.db_models import ProfileORM  # for autogenerate # noqa: F401
+from infrastructure.db.db_models import ProfileORM  # type: ignore # for autogenerate # noqa: F401
 from infrastructure.db.base import Base
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
