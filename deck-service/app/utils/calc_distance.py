@@ -26,4 +26,4 @@ def calc_distance_in_query(current_profile: "ProfileORM", profile_orm: "ProfileO
         2,  # round 2 decimal places
     ).label("distance_km")
 
-    return distance_expr
+    return distance_expr  # noqa: RET504
