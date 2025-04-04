@@ -1,7 +1,9 @@
 from typing import Any, Literal, TypedDict
 
-from application.schemas.preference import PreferenceCreate
-from application.schemas.profile import ProfileCreate
+from application.schemas.preference import PreferenceCreateSchema
+from application.schemas.profile import ProfileCreateSchema
+from domain.models.preference import Preference
+from domain.models.profile import Profile
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.preference import PreferenceRepositoryImpl
 from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
@@ -16,12 +18,9 @@ class Event(TypedDict):
     timestamp: str
 
 
-DataType = Event["data"]
-
-
 async def handle_event(event: Event):
-    event_type = event.get("event_type")
-    data = event.get("data")
+    event_type = event["event_type"]
+    data = event["data"]
     if not event_type or not data:
         return
 
@@ -38,16 +37,18 @@ async def handle_event(event: Event):
 
 
 async def handle_profile_created(
-    data: DataType,
+    data: dict[str, Any],
 ):
     async with db_helper.session_factory() as session:
-        profile_data: ProfileCreate = ProfileCreate(**data)
-        await ProfileRepositoryImpl(session).create_profile(profile_data)
+        profile_schema = ProfileCreateSchema(**data)
+        profile = Profile(**profile_schema.model_dump())
+        await ProfileRepositoryImpl(session).create_profile(profile)
 
 
 async def handle_preference_created(
-    data: DataType,
+    data: dict[str, Any],
 ):
     async with db_helper.session_factory() as session:
-        preference_data: PreferenceCreate = PreferenceCreate(**data)
-        await PreferenceRepositoryImpl(session).create_preference(preference_data)
+        preference_schema = PreferenceCreateSchema(**data)
+        preference = Preference(**preference_schema.model_dump())
+        await PreferenceRepositoryImpl(session).create_preference(preference)
