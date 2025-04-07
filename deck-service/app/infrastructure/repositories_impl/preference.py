@@ -20,16 +20,14 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
         try:
             existing_preference = await self.get_preference_by_profile_id(preference.profile_id)
             if existing_preference:
-                raise PreferenceAlreadyExistsError(
-                    f"Preference for profile {preference.profile_id} already exists"
-                )
+                raise PreferenceAlreadyExistsError(preference.profile_id)
             preference_orm = domain_to_orm(preference)
             self.db_session.add(preference_orm)
             await self.db_session.commit()
             await self.db_session.refresh(preference_orm)
             return orm_to_domain(preference_orm)
         except Exception as e:
-            raise PreferenceCreateError("Preference creation failed") from e
+            raise PreferenceCreateError() from e
 
     async def get_preference_by_id(self, preference_id: int) -> Preference | None:
         try:
@@ -40,7 +38,7 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
                 return None
             return orm_to_domain(preference_orm)
         except Exception as e:
-            raise PreferenceNotFoundError(f"Preference {preference_id} not found") from e
+            raise PreferenceNotFoundError(preference_id) from e
 
     async def get_preference_by_profile_id(self, profile_id: int) -> Preference | None:
         try:
@@ -51,7 +49,7 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
                 return None
             return orm_to_domain(preference_orm)
         except Exception as e:
-            raise PreferenceNotFoundError(f"Preference for profile {profile_id} not found") from e
+            raise PreferenceNotFoundError(profile_id) from e
 
     async def get_preferences(self) -> list[Preference] | None:
         try:
@@ -62,4 +60,4 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
                 return None
             return [orm_to_domain(preference_orm) for preference_orm in preferences_orm]
         except Exception as e:
-            raise PreferenceNotFoundError("Preferences not found") from e
+            raise PreferenceNotFoundError() from e
