@@ -1,4 +1,3 @@
-from application.schemas.profile import ProfileWithDistance
 from domain.exceptions import (
     CandidateNotFoundError,
     DeckCacheError,
@@ -9,6 +8,7 @@ from domain.models.deck import MatchCard, MatchDeck
 from domain.repositories.deck import IDeckRepository
 from domain.repositories.profile import IProfileRepository
 from domain.repositories.swipe import ISwipeRepository
+from presentation.schemas.profile import ProfileWithDistance  # bad idea!!!
 
 
 class DeckService:
