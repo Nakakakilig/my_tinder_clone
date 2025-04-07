@@ -10,6 +10,15 @@ class RunConfig(BaseModel):
     port: int = 8002
 
 
+class PaginationConfig(BaseModel):
+    min_limit: int = 1
+    max_limit: int = 50
+    default_limit: int = 10
+    min_offset: int = 0
+    max_offset: int = 50
+    default_offset: int = 0
+
+
 class ApiPrefix(BaseModel):
     prefix: str = "/api"
     swipes: str = "/swipes"
@@ -42,6 +51,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     kafka: KafkaConfig = KafkaConfig()
+    pagination: PaginationConfig = PaginationConfig()
 
 
-settings = Settings()
+settings = Settings()  # type: ignore

@@ -1,10 +1,11 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from application.schemas.swipe import SwipeCreateSchema, SwipeReadSchema
 from application.services.swipe import SwipeService
+from config.settings import settings
 from domain.exceptions import SwipeCreateError
 from domain.models.swipe import Swipe
 from presentation.dependencies.swipe import get_swipe_service
@@ -16,14 +17,26 @@ from presentation.mappers.swipe import (
 router = APIRouter(tags=["swipes"])
 
 
+class PaginationParams(BaseModel):
+    limit: int = Query(
+        default=settings.pagination.default_limit,
+        ge=settings.pagination.min_limit,
+        le=settings.pagination.max_limit,
+    )
+    offset: int = Query(
+        default=settings.pagination.default_offset,
+        ge=settings.pagination.min_offset,
+        le=settings.pagination.max_offset,
+    )
+
+
 @router.get("/")
 async def get_swipes(
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
-    limit: int = Query(default=10, ge=1, le=100),
-    offset: int = Query(default=0, ge=0),
+    pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[SwipeReadSchema] | None:
     try:
-        swipes = await swipe_service.get_swipes(limit, offset)
+        swipes = await swipe_service.get_swipes(pagination.limit, pagination.offset)
         if not swipes:
             return None
         return swipes_to_read_schema_list(swipes)
@@ -74,13 +87,12 @@ async def create_swipe(
 async def get_swipes_by_profile_id(
     profile_id: int,
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
-    limit: int = Query(default=10, ge=1, le=100),
-    offset: int = Query(default=0, ge=0),
+    pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[SwipeReadSchema] | None:
     """Get all swipes associated with a profile ID."""
     try:
         swipes = await swipe_service.get_swipes_by_profile_id(
-            profile_id, limit, offset
+            profile_id, pagination.limit, pagination.offset
         )
         if not swipes:
             raise HTTPException(
