@@ -1,7 +1,9 @@
 import asyncio
+import contextlib
 import random
 
 from application.schemas.swipe import SwipeCreateSchema
+from domain.exceptions import SwipeAlreadyExistsError
 from domain.models.swipe import Swipe
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
@@ -56,7 +58,8 @@ async def create_swipes_between_profiles(n_profiles: int = 100):
     async for session in db_helper.session_getter():
         for swipe_create in swipe_creates:
             swipe = Swipe(**swipe_create.model_dump())
-            await SwipeRepositoryImpl(session).create_swipe(swipe)
+            with contextlib.suppress(SwipeAlreadyExistsError):
+                await SwipeRepositoryImpl(session).create_swipe(swipe)
 
     print(f"Created {len(swipe_creates)} swipes")
     return
