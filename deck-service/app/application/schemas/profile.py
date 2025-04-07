@@ -28,6 +28,5 @@ class ProfileReadSchema(ProfileBaseSchema):
     updated_at: datetime
 
 
-class ProfileWithDistance(BaseModel):
-    profile: ProfileReadSchema
+class ProfileWithDistance(ProfileReadSchema):
     distance_km: float
