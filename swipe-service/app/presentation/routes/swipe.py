@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from pydantic import BaseModel, ValidationError
 
 from application.schemas.swipe import SwipeCreateSchema, SwipeReadSchema
@@ -85,7 +85,7 @@ async def create_swipe(
 
 @router.get("/profile/{profile_id}/")
 async def get_swipes_by_profile_id(
-    profile_id: int,
+    profile_id: Annotated[int, Path(gt=0)],
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
     pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[SwipeReadSchema] | None:
@@ -109,8 +109,8 @@ async def get_swipes_by_profile_id(
 
 @router.get("/profile/{profile_id_1}/profile/{profile_id_2}/")
 async def get_swipe_by_two_profile_ids(
-    profile_id_1: int,
-    profile_id_2: int,
+    profile_id_1: Annotated[int, Path(gt=0)],
+    profile_id_2: Annotated[int, Path(gt=0)],
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
 ) -> SwipeReadSchema | None:
     try:
