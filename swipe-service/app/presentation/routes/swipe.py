@@ -90,10 +90,7 @@ async def get_swipes_by_profile_id(
             profile_id, pagination.limit, pagination.offset
         )
         if not swipes:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No swipes found for profile {profile_id}",
-            )
+            return None
         return swipes_to_read_schema_list(swipes)
     except Exception as e:
         raise HTTPException(
