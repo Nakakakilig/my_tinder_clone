@@ -41,6 +41,12 @@ class RedisConfig(BaseModel):
     expire: int = 3600
 
 
+class SwipeConfig(BaseModel):
+    url: str
+    get_profile_swipes: str = "/profile/{profile_id}/"
+    get_swipe_by_profiles: str = "/profile/{profile_id_1}/profile/{profile_id_2}/"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(
@@ -57,6 +63,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     kafka: KafkaConfig = KafkaConfig()
     redis: RedisConfig
+    swipe: SwipeConfig
 
 
-settings = Settings()
+settings = Settings()  # type: ignore
