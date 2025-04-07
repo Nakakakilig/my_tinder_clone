@@ -9,7 +9,7 @@ class IDeckRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def generate_deck_by_id(self, profile_id: int, limit: int) -> MatchDeck:
+    async def save_deck(self, deck: MatchDeck) -> None:
         raise NotImplementedError
 
     @abstractmethod
