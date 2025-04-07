@@ -19,14 +19,10 @@ class SwipeService:
     async def get_swipes_by_profile_id(
         self, profile_id: int, limit: int, offset: int
     ) -> list[Swipe] | None:
-        return await self.swipe_repository.get_swipes_by_profile_id(
-            profile_id, limit, offset
-        )
+        return await self.swipe_repository.get_swipes_by_profile_id(profile_id, limit, offset)
 
     async def get_swipe_by_two_profile_ids(
         self, profile_id_1: int, profile_id_2: int
     ) -> Swipe | None:
-        swipe = await self.swipe_repository.get_swipe_by_two_profile_ids(
-            profile_id_1, profile_id_2
-        )
+        swipe = await self.swipe_repository.get_swipe_by_two_profile_ids(profile_id_1, profile_id_2)
         return swipe
