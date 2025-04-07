@@ -108,14 +108,10 @@ async def get_swipe_by_two_profile_ids(
     try:
         swipe = await swipe_service.get_swipe_by_two_profile_ids(profile_id_1, profile_id_2)
         if not swipe:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No swipe found for \
-                    profile {profile_id_1} and profile {profile_id_2}",
-            )
+            return None
         return swipe_to_read_schema(swipe)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred",
+            detail=f"An unexpected error occurred: {str(e)}",
         ) from e
