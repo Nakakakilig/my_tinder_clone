@@ -1,5 +1,5 @@
-from application.schemas.preference import PreferenceReadSchema
 from domain.models.preference import Preference
+from presentation.schemas.preference import PreferenceReadSchema
 
 
 def preference_to_read_schema(preference: Preference) -> PreferenceReadSchema:

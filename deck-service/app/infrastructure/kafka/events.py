@@ -1,12 +1,12 @@
 from typing import Any, Literal, TypedDict
 
-from application.schemas.preference import PreferenceCreateSchema
-from application.schemas.profile import ProfileCreateSchema
 from domain.models.preference import Preference
 from domain.models.profile import Profile
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.preference import PreferenceRepositoryImpl
 from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
+from presentation.schemas.preference import PreferenceCreateSchema
+from presentation.schemas.profile import ProfileCreateSchema
 
 
 class Event(TypedDict):
@@ -33,7 +33,7 @@ async def handle_event(event: Event):
     if handler:
         await handler(data=data)
     else:
-        raise ValueError(f"No handler found for event type: {event_type}")
+        raise ValueError(f"No handler found for event type: {event_type}")  # noqa: TRY003
 
 
 async def handle_profile_created(

@@ -3,11 +3,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 
-from application.schemas.profile import ProfileReadSchema
 from application.services.profile import ProfileService
 from domain.exceptions import ProfileNotFoundError
 from presentation.dependencies.profile import get_profile_service
 from presentation.mappers.profile import profile_to_read_schema, profiles_to_read_schema_list
+from presentation.schemas.profile import ProfileReadSchema
 
 router = APIRouter(tags=["profiles"])
 
