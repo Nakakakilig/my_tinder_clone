@@ -26,7 +26,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "B", "W", "UP", "RUF", "FAST", "ASYNC", "SIM", "RET",  "C4", "A", "PL", "TRY"]
-ignore = ["TRY301", "RUF010", "RUF100", "RET504"]
+ignore = ["TRY301", "RUF010", "RUF100", "RET504", "PLR1711"]
 
 [tool.ruff.lint.per-file-ignores]
 "*/alembic/**/*" = ["ALL"]
