@@ -1,5 +1,5 @@
-from application.schemas.swipe import SwipeReadSchema
 from domain.models.swipe import Swipe
+from presentation.schemas.swipe import SwipeReadSchema
 
 
 def swipe_to_read_schema(swipe: Swipe) -> SwipeReadSchema:
