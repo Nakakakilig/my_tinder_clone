@@ -59,19 +59,14 @@ async def create_swipe(
 ) -> SwipeReadSchema:
     try:
         swipe_model = Swipe(**swipe.model_dump())
-        created_swipe: Swipe | None = await swipe_service.create_swipe(
-            swipe_model
-        )
+        created_swipe: Swipe | None = await swipe_service.create_swipe(swipe_model)
         if created_swipe:
             return swipe_to_read_schema(created_swipe)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Swipe not created",
         )
-    except (
-        ValidationError,
-        SwipeCreateError,
-    ) as e:
+    except (ValidationError, SwipeCreateError) as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid input or output data",
@@ -114,9 +109,7 @@ async def get_swipe_by_two_profile_ids(
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
 ) -> SwipeReadSchema | None:
     try:
-        swipe = await swipe_service.get_swipe_by_two_profile_ids(
-            profile_id_1, profile_id_2
-        )
+        swipe = await swipe_service.get_swipe_by_two_profile_ids(profile_id_1, profile_id_2)
         if not swipe:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
