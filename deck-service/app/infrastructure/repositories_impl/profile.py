@@ -1,7 +1,9 @@
-from sqlalchemy import select
+from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config.settings import settings
 from domain.exceptions import (
+    PreferenceForProfileNotFoundError,
     ProfileAlreadyExistsError,
     ProfileCreateError,
     ProfileNotFoundError,
@@ -10,6 +12,7 @@ from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.db.db_models import ProfileORM
 from infrastructure.mappers.profile import domain_to_orm, orm_to_domain
+from utils.calc_distance import calc_distance_in_query
 
 
 class ProfileRepositoryImpl(IProfileRepository):
@@ -50,3 +53,38 @@ class ProfileRepositoryImpl(IProfileRepository):
             return [orm_to_domain(profile_orm) for profile_orm in profiles_orm]
         except Exception as e:
             raise ProfileNotFoundError() from e
+
+    async def get_candidates_and_distance(
+        self, profile_id: int, limit: int
+    ) -> list[tuple[Profile, float]]:
+        result = await self.db_session.execute(
+            select(ProfileORM).where(ProfileORM.id == profile_id)
+        )
+        profile = result.scalars().first()
+
+        if not profile:
+            raise ProfileNotFoundError(profile_id)
+
+        preference = profile.preference
+        if not preference:
+            raise PreferenceForProfileNotFoundError(profile_id)
+        distance_expr = calc_distance_in_query(profile, ProfileORM)  # type: ignore
+
+        filters = [
+            ProfileORM.gender == preference.gender,
+            ProfileORM.age >= preference.age - settings.deck.age_range,
+            ProfileORM.age <= preference.age + settings.deck.age_range,
+        ]
+        query = (
+            select(ProfileORM, distance_expr)
+            .filter(and_(*filters))
+            .group_by(ProfileORM.id)
+            .order_by(distance_expr)
+            .limit(limit)
+        )
+
+        query = query.having(distance_expr <= preference.radius)
+
+        result = await self.db_session.execute(query)
+        profiles_and_distance: list[tuple[ProfileORM, float]] = result.all()  # type: ignore
+        return [(orm_to_domain(profile), distance) for profile, distance in profiles_and_distance]
