@@ -44,9 +44,9 @@ async def consume():
             event = message.value  # type: ignore
             await handle_event(event)  # type: ignore
     finally:
-        await consumer.stop()
+        await consumer.stop()  # type: ignore
 
 
 async def start_consumer_loop():
     loop = asyncio.get_event_loop()
-    _ = await loop.create_task(consume())
+    loop.create_task(consume())  # noqa: RUF006
