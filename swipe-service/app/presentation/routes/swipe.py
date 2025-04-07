@@ -40,15 +40,15 @@ async def get_swipes(
         if not swipes:
             return None
         return swipes_to_read_schema_list(swipes)
-    except ValidationError as e:
+    except ValidationError as e:  # todo: input validated by pydantic, so need to validate output
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid input or output data",
+            detail=f"Invalid input or output data: {str(e)}",
         ) from e
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred",
+            detail=f"An unexpected error occurred: {str(e)}",
         ) from e
 
 
@@ -69,12 +69,12 @@ async def create_swipe(
     except (ValidationError, SwipeCreateError) as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid input or output data",
+            detail=f"Invalid input or output data: {str(e)}",
         ) from e
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred",
+            detail=f"An unexpected error occurred: {str(e)}",
         ) from e
 
 
@@ -95,7 +95,7 @@ async def get_swipes_by_profile_id(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred",
+            detail=f"An unexpected error occurred: {str(e)}",
         ) from e
 
 
