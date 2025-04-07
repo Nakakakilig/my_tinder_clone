@@ -7,8 +7,8 @@ class DeckNotFoundError(Exception):
 
 
 class DeckGenerateError(Exception):
-    def __init__(self, profile_id: int):
-        super().__init__(f"Deck generation for profile {profile_id} failed")
+    def __init__(self, profile_id: int, error: str):
+        super().__init__(f"Deck generation for profile {profile_id} failed: {error}")
 
 
 class CandidateNotFoundError(Exception):
