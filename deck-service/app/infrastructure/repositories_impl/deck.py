@@ -25,13 +25,17 @@ class DeckRepositoryImpl(IDeckRepository):
         await self.cache.delete(f"deck:{profile_id}")
         return
 
-    async def get_all_decks(self) -> list[MatchDeck]:
+    async def get_all_decks(self, limit: int, offset: int) -> list[MatchDeck]:
         decks_data = await self.cache.get_all_values()
         if not decks_data:
             raise DeckCacheError()
         decks = [MatchDeck(**deck_data) for deck_data in decks_data]
         sorted_decks = sorted(decks, key=lambda x: x.profile_id)
-        return sorted_decks
+
+        len_decks = len(sorted_decks)
+        if offset > len_decks or limit > len_decks or offset + limit > len_decks:
+            return sorted_decks
+        return sorted_decks[offset : offset + limit]
 
     async def clear_all_deck_cache(self) -> None:
         await self.cache.clear()

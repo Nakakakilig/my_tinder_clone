@@ -62,8 +62,8 @@ class DeckService:
         except Exception as e:
             raise DeckGenerateError(profile_id, str(e)) from e
 
-    async def get_all_decks(self) -> list[MatchDeck]:
-        return await self.deck_repository.get_all_decks()
+    async def get_all_decks(self, limit: int, offset: int) -> list[MatchDeck]:
+        return await self.deck_repository.get_all_decks(limit, offset)
 
     async def clear_deck_cache_by_id(self, profile_id: int) -> None:
         return await self.deck_repository.clear_deck_cache_by_id(profile_id)

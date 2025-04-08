@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Path, status
 from config.settings import settings
 from domain.models.deck import MatchDeck
 from presentation.dependencies.deck import get_deck_service
+from presentation.routes.common import PaginationParams
 from use_cases.deck import DeckService
 
 router = APIRouter(tags=["decks"])
@@ -12,9 +13,10 @@ router = APIRouter(tags=["decks"])
 
 @router.get("/", response_model=list[MatchDeck])
 async def get_all_decks(
+    pagination: Annotated[PaginationParams, Depends()],
     deck_service: Annotated[DeckService, Depends(get_deck_service)],
 ):
-    return await deck_service.get_all_decks()
+    return await deck_service.get_all_decks(pagination.limit, pagination.offset)
 
 
 @router.get("/{profile_id}")

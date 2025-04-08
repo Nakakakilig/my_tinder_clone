@@ -13,7 +13,7 @@ class IDeckRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all_decks(self) -> list[MatchDeck]:
+    async def get_all_decks(self, limit: int, offset: int) -> list[MatchDeck]:
         raise NotImplementedError
 
     @abstractmethod

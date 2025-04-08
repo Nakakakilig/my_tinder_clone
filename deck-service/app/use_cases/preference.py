@@ -15,8 +15,8 @@ class PreferenceService:
     async def get_preference_by_profile_id(self, profile_id: int) -> Preference | None:
         return await self.preference_repository.get_preference_by_profile_id(profile_id)
 
-    async def get_preferences(self) -> list[Preference] | None:
-        return await self.preference_repository.get_preferences()
+    async def get_preferences(self, limit: int, offset: int) -> list[Preference] | None:
+        return await self.preference_repository.get_preferences(limit, offset)
 
     async def create_preference(self, preference: Preference) -> Preference | None:
         return await self.preference_repository.create_preference(preference)

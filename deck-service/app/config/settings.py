@@ -22,6 +22,15 @@ class DeckConfig(BaseModel):
     age_range: int = 3
 
 
+class PaginationConfig(BaseModel):
+    min_limit: int = 1
+    max_limit: int = 50
+    default_limit: int = 10
+    min_offset: int = 0
+    max_offset: int = 50
+    default_offset: int = 0
+
+
 class DatabaseConfig(BaseModel):
     url: PostgresDsn
     echo: bool = False
@@ -64,6 +73,7 @@ class Settings(BaseSettings):
     kafka: KafkaConfig = KafkaConfig()
     redis: RedisConfig
     swipe: SwipeConfig
+    pagination: PaginationConfig = PaginationConfig()
 
 
 settings = Settings()  # type: ignore

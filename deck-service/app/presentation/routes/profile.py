@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Path
 from domain.exceptions import ProfileNotFoundError
 from presentation.dependencies.profile import get_profile_service
 from presentation.mappers.profile import profile_to_read_schema, profiles_to_read_schema_list
+from presentation.routes.common import PaginationParams
 from presentation.schemas.profile import ProfileReadSchema
 from use_cases.profile import ProfileService
 
@@ -13,9 +14,10 @@ router = APIRouter(tags=["profiles"])
 
 @router.get("/")
 async def get_profiles(
+    pagination: Annotated[PaginationParams, Depends()],
     profile_service: Annotated[ProfileService, Depends(get_profile_service)],
 ) -> list[ProfileReadSchema]:
-    profiles = await profile_service.get_profiles()
+    profiles = await profile_service.get_profiles(pagination.limit, pagination.offset)
     if not profiles:
         raise ProfileNotFoundError()
     return profiles_to_read_schema_list(profiles)

@@ -43,9 +43,9 @@ class ProfileRepositoryImpl(IProfileRepository):
         except Exception as e:
             raise ProfileCreateError() from e
 
-    async def get_profiles(self) -> list[Profile] | None:
+    async def get_profiles(self, limit: int, offset: int) -> list[Profile] | None:
         try:
-            stmt = select(ProfileORM).order_by(ProfileORM.id)
+            stmt = select(ProfileORM).order_by(ProfileORM.id).offset(offset).limit(limit)
             result = await self.db_session.execute(stmt)
             profiles_orm = result.scalars().all()
             if not profiles_orm:
