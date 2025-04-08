@@ -2,7 +2,6 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from application.services.deck import DeckService
 from config.settings import settings
 from domain.exceptions import (
     DeckCacheClearError,
@@ -12,6 +11,7 @@ from domain.exceptions import (
 )
 from domain.models.deck import MatchDeck
 from presentation.dependencies.deck import get_deck_service
+from use_cases.deck import DeckService
 
 router = APIRouter(tags=["decks"])
 
