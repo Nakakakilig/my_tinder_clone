@@ -1,7 +1,9 @@
 import asyncio
+import contextlib
 import random
 
 from domain.enums import Gender
+from domain.exceptions import PreferenceAlreadyExistsError
 from domain.models.preference import Preference
 from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.init import get_kafka_producer
@@ -33,6 +35,7 @@ async def create_multiple_preferences(
                 kafka_producer=kafka_producer,
             )
             preference_model = Preference(**preference_create.model_dump())
-            await preference_service.create_preference(preference_model)
+            with contextlib.suppress(PreferenceAlreadyExistsError):  # skip error
+                await preference_service.create_preference(preference_model)
 
     print(f"Created {n_preferences} preferences")

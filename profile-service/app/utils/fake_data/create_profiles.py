@@ -1,9 +1,11 @@
 import asyncio
+import contextlib
 import random
 
 from faker import Faker
 
 from domain.enums import Gender
+from domain.exceptions import ProfileAlreadyExistsError
 from domain.models.profile import Profile
 from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.init import get_kafka_producer
@@ -46,6 +48,6 @@ async def create_multiple_profiles(
                 profile_repository=ProfileRepositoryImpl(session),
                 kafka_producer=kafka_producer,
             )
-            # todo: add exception handling
-            await profile_service.create_profile(profile)
+            with contextlib.suppress(ProfileAlreadyExistsError):  # skip error
+                await profile_service.create_profile(profile)
     print(f"Created {n_profiles} profiles")
