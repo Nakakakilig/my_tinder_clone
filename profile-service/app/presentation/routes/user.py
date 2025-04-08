@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from application.schemas.user import UserCreateSchema, UserReadSchema
@@ -7,26 +9,26 @@ from presentation.dependencies.user import get_user_service
 router = APIRouter(tags=["users"])
 
 
-@router.post("/", response_model=UserReadSchema)
+@router.post("/")
 async def create_user(
     user_create: UserCreateSchema,
-    user_service: UserService = Depends(get_user_service),
+    user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema:
     # TODO: somehow create profile after user creation
     user = await user_service.create_user(user_create)
     return user
 
 
-@router.get("/", response_model=list[UserReadSchema])
+@router.get("/")
 async def get_users(
-    user_service: UserService = Depends(get_user_service),
-) -> list[UserReadSchema]:
+    user_service: Annotated[UserService, Depends(get_user_service)],
+) -> list[UserReadSchema] | None:
     return await user_service.get_users()
 
 
-@router.get("/{user_id}", response_model=UserReadSchema)
+@router.get("/{user_id}")
 async def get_user(
     user_id: int,
-    user_service: UserService = Depends(get_user_service),
-) -> UserReadSchema:
+    user_service: Annotated[UserService, Depends(get_user_service)],
+) -> UserReadSchema | None:
     return await user_service.get_user_by_id(user_id)
