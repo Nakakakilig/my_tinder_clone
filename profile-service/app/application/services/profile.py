@@ -24,6 +24,7 @@ class ProfileService:
             "data": profile_data,
             "timestamp": datetime.now().isoformat(),
         }
+        # todo:  bad idea, now i depend on implementation, not on interface
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return profile
 
