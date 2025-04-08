@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from domain.models.user import User
 from presentation.dependencies.user import get_user_service
 from presentation.mappers.user import user_to_read_schema, users_to_read_schema_list
+from presentation.routes.common import PaginationParams
 from presentation.schemas.user import UserCreateSchema, UserReadSchema
 from use_cases.user import UserService
 
@@ -25,8 +26,9 @@ async def create_user(
 @router.get("/")
 async def get_users(
     user_service: Annotated[UserService, Depends(get_user_service)],
+    pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[UserReadSchema] | None:
-    users = await user_service.get_users()
+    users = await user_service.get_users(pagination.limit, pagination.offset)
     if users is None:
         return None
     return users_to_read_schema_list(users)

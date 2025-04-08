@@ -52,9 +52,9 @@ class UserRepositoryImpl(IUserRepository):
         except Exception as e:
             raise UserCreateError(user.username) from e
 
-    async def get_users(self) -> list[User]:
+    async def get_users(self, limit: int, offset: int) -> list[User]:
         try:
-            stmt = select(UserORM).order_by(UserORM.id)
+            stmt = select(UserORM).order_by(UserORM.id).limit(limit).offset(offset)
             result = await self.db_session.execute(stmt)
             users_orm = result.scalars().all()
             return [orm_to_domain(user_orm) for user_orm in users_orm]

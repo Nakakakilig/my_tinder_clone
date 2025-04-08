@@ -8,6 +8,7 @@ from presentation.mappers.preference import (
     preference_to_read_schema,
     preferences_to_read_schema_list,
 )
+from presentation.routes.common import PaginationParams
 from presentation.schemas.preference import PreferenceCreateSchema, PreferenceReadSchema
 from use_cases.preference import PreferenceService
 
@@ -17,8 +18,9 @@ router = APIRouter(tags=["preferences"])
 @router.get("/")
 async def get_preferences(
     preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
+    pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[PreferenceReadSchema] | None:
-    preferences = await preference_service.get_preferences()
+    preferences = await preference_service.get_preferences(pagination.limit, pagination.offset)
     if not preferences:
         return None
     return preferences_to_read_schema_list(preferences)

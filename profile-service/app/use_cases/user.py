@@ -15,5 +15,5 @@ class UserService:
     async def get_user_by_username(self, username: str) -> User | None:
         return await self.user_repository.get_user_by_username(username)
 
-    async def get_users(self) -> list[User] | None:
-        return await self.user_repository.get_users()
+    async def get_users(self, limit: int, offset: int) -> list[User] | None:
+        return await self.user_repository.get_users(limit, offset)

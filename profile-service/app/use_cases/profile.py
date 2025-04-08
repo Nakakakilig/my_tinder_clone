@@ -34,5 +34,5 @@ class ProfileService:
     async def get_profile_by_user_id(self, user_id: int) -> Profile | None:
         return await self.profile_repository.get_profile_by_user_id(user_id)
 
-    async def get_profiles(self) -> list[Profile] | None:
-        return await self.profile_repository.get_profiles()
+    async def get_profiles(self, limit: int, offset: int) -> list[Profile] | None:
+        return await self.profile_repository.get_profiles(limit, offset)

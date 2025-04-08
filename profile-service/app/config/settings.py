@@ -17,6 +17,15 @@ class ApiPrefix(BaseModel):
     preferences: str = "/preferences"
 
 
+class PaginationConfig(BaseModel):
+    min_limit: int = 1
+    max_limit: int = 50
+    default_limit: int = 10
+    min_offset: int = 0
+    max_offset: int = 50
+    default_offset: int = 0
+
+
 class DatabaseConfig(BaseModel):
     url: PostgresDsn
     echo: bool = False
@@ -45,6 +54,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     kafka: KafkaConfig = KafkaConfig()
+    pagination: PaginationConfig = PaginationConfig()
 
 
 settings = Settings()  # type: ignore

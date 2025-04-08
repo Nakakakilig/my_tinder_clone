@@ -17,5 +17,5 @@ class IProfileRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_profiles(self) -> list[Profile] | None:
+    async def get_profiles(self, limit: int, offset: int) -> list[Profile] | None:
         raise NotImplementedError

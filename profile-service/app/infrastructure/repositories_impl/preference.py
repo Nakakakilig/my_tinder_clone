@@ -56,9 +56,9 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
         except Exception as e:
             raise PreferenceCreateError(preference.profile_id) from e
 
-    async def get_preferences(self) -> list[Preference]:
+    async def get_preferences(self, limit: int, offset: int) -> list[Preference]:
         try:
-            stmt = select(PreferenceORM).order_by(PreferenceORM.id)
+            stmt = select(PreferenceORM).order_by(PreferenceORM.id).limit(limit).offset(offset)
             result = await self.db_session.execute(stmt)
             preference_orms = result.scalars().all()
             return [orm_to_domain(preference_orm) for preference_orm in preference_orms]
