@@ -1,10 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
-from pydantic import BaseModel, ValidationError
+from fastapi import APIRouter, Depends, Path, Query
+from pydantic import BaseModel
 
 from config.settings import settings
-from domain.exceptions import SwipeCreateError
 from domain.models.swipe import Swipe
 from presentation.dependencies.swipe import get_swipe_service
 from presentation.mappers.swipe import (
@@ -35,21 +34,10 @@ async def get_swipes(
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
     pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[SwipeReadSchema] | None:
-    try:
-        swipes = await swipe_service.get_swipes(pagination.limit, pagination.offset)
-        if not swipes:
-            return None
-        return swipes_to_read_schema_list(swipes)
-    except ValidationError as e:  # todo: input validated by pydantic, so need to validate output
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid input or output data: {str(e)}",
-        ) from e
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unexpected error occurred: {str(e)}",
-        ) from e
+    swipes = await swipe_service.get_swipes(pagination.limit, pagination.offset)
+    if not swipes:
+        return None
+    return swipes_to_read_schema_list(swipes)
 
 
 @router.post("/")
@@ -57,25 +45,9 @@ async def create_swipe(
     swipe: SwipeCreateSchema,
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
 ) -> SwipeReadSchema:
-    try:
-        swipe_model = Swipe(**swipe.model_dump())
-        created_swipe: Swipe | None = await swipe_service.create_swipe(swipe_model)
-        if created_swipe:
-            return swipe_to_read_schema(created_swipe)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Swipe not created",
-        )
-    except (ValidationError, SwipeCreateError) as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid input or output data: {str(e)}",
-        ) from e
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unexpected error occurred: {str(e)}",
-        ) from e
+    swipe_model = Swipe(**swipe.model_dump())
+    created_swipe = await swipe_service.create_swipe(swipe_model)
+    return swipe_to_read_schema(created_swipe)
 
 
 @router.get("/profile/{profile_id}/")
@@ -85,18 +57,12 @@ async def get_swipes_by_profile_id(
     pagination: Annotated[PaginationParams, Depends(PaginationParams)],
 ) -> list[SwipeReadSchema] | None:
     """Get all swipes associated with a profile ID."""
-    try:
-        swipes = await swipe_service.get_swipes_by_profile_id(
-            profile_id, pagination.limit, pagination.offset
-        )
-        if not swipes:
-            return None
-        return swipes_to_read_schema_list(swipes)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unexpected error occurred: {str(e)}",
-        ) from e
+    swipes = await swipe_service.get_swipes_by_profile_id(
+        profile_id, pagination.limit, pagination.offset
+    )
+    if not swipes:
+        return None
+    return swipes_to_read_schema_list(swipes)
 
 
 @router.get("/profile/{profile_id_1}/profile/{profile_id_2}/")
@@ -105,13 +71,7 @@ async def get_swipe_by_two_profile_ids(
     profile_id_2: Annotated[int, Path(gt=0)],
     swipe_service: Annotated[SwipeService, Depends(get_swipe_service)],
 ) -> SwipeReadSchema | None:
-    try:
-        swipe = await swipe_service.get_swipe_by_two_profile_ids(profile_id_1, profile_id_2)
-        if not swipe:
-            return None
-        return swipe_to_read_schema(swipe)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An unexpected error occurred: {str(e)}",
-        ) from e
+    swipe = await swipe_service.get_swipe_by_two_profile_ids(profile_id_1, profile_id_2)
+    if not swipe:
+        return None
+    return swipe_to_read_schema(swipe)

@@ -9,7 +9,7 @@ class SwipeService:
     ):
         self.swipe_repository = swipe_repository
 
-    async def create_swipe(self, swipe: Swipe) -> Swipe | None:
+    async def create_swipe(self, swipe: Swipe) -> Swipe:
         swipe = await self.swipe_repository.create_swipe(swipe)
         return swipe
 
