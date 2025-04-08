@@ -1,3 +1,21 @@
+class UserAlreadyExistsError(Exception):
+    def __init__(self, username: str):
+        super().__init__(f"User {username} already exists")
+
+
+class UserCreateError(Exception):
+    def __init__(self, username: str):
+        super().__init__(f"Error creating user {username}")
+
+
+class UserNotFoundError(Exception):
+    def __init__(self, user_id: int | None = None):
+        if user_id:
+            super().__init__(f"User {user_id} not found")
+        else:
+            super().__init__("Users not found")
+
+
 class ProfileAlreadyExistsError(Exception):
     def __init__(self, user_id: int):
         super().__init__(f"Profile for user {user_id} already exists")
