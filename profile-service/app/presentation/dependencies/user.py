@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,7 +9,7 @@ from use_cases.user import UserService
 
 
 def get_user_service(
-    db_session: AsyncSession = Depends(get_db_session),
+    db_session: Annotated[AsyncSession, Depends(get_db_session)],
 ) -> UserService:
     user_repository = UserRepositoryImpl(db_session)
     return UserService(user_repository)
