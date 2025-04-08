@@ -9,6 +9,9 @@ from domain.exceptions import (
     ProfileAlreadyExistsError,
     ProfileCreateError,
     ProfileNotFoundError,
+    UserAlreadyExistsError,
+    UserCreateError,
+    UserNotFoundError,
 )
 
 
@@ -52,6 +55,27 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
     async def _(request: Request, exc: PreferenceAlreadyExistsError):
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(UserNotFoundError)
+    async def _(request: Request, exc: UserNotFoundError):
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(UserAlreadyExistsError)
+    async def _(request: Request, exc: UserAlreadyExistsError):
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(UserCreateError)
+    async def _(request: Request, exc: UserCreateError):
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": str(exc)},
         )
 
