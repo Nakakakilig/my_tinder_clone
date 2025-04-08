@@ -1,8 +1,7 @@
 import json
 from enum import Enum
 
-from aiokafka import AIOKafkaProducer
-from pydantic import BaseModel
+from aiokafka import AIOKafkaProducer  # type: ignore
 
 
 class KafkaProducer:
@@ -15,7 +14,7 @@ class KafkaProducer:
         if self._producer is None:
             self._producer = AIOKafkaProducer(
                 bootstrap_servers=self.bootstrap_servers,
-                value_serializer=lambda v: json.dumps(
+                value_serializer=lambda v: json.dumps(  # type: ignore
                     v, default=lambda x: x.value if isinstance(x, Enum) else str(x)
                 ).encode("utf-8"),
             )
@@ -34,4 +33,4 @@ class KafkaProducer:
     async def send_event(self, topic: str, event: BaseModel):
         if not self._producer:
             await self.start()
-        await self.producer.send_and_wait(topic, event)
+        await self.producer.send_and_wait(topic, event)  # type: ignore
