@@ -1,5 +1,5 @@
-from application.schemas.user import UserReadSchema
 from domain.models.user import User
+from presentation.schemas.user import UserReadSchema
 
 
 def user_to_read_schema(user: User) -> UserReadSchema:

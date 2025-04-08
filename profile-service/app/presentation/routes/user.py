@@ -2,11 +2,11 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from application.schemas.user import UserCreateSchema, UserReadSchema
 from application.services.user import UserService
 from domain.models.user import User
 from presentation.dependencies.user import get_user_service
 from presentation.mappers.user import user_to_read_schema, users_to_read_schema_list
+from presentation.schemas.user import UserCreateSchema, UserReadSchema
 
 router = APIRouter(tags=["users"])
 
