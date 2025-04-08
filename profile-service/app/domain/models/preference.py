@@ -10,4 +10,5 @@ class Preference:
     gender: Gender
     age: int
     radius: int
-    updated_at: datetime
+    id: int | None = None
+    updated_at: datetime | None = None
