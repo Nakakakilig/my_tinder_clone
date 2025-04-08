@@ -30,11 +30,11 @@ class PreferenceService:
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return preference
 
-    async def get_preference_by_id(self, preference_id: int) -> Preference:
+    async def get_preference_by_id(self, preference_id: int) -> Preference | None:
         return await self.preference_repository.get_preference_by_id(preference_id)
 
-    async def get_preference_by_profile_id(self, profile_id: int) -> Preference:
+    async def get_preference_by_profile_id(self, profile_id: int) -> Preference | None:
         return await self.preference_repository.get_preference_by_profile_id(profile_id)
 
-    async def get_preferences(self) -> list[Preference]:
+    async def get_preferences(self) -> list[Preference] | None:
         return await self.preference_repository.get_preferences()
