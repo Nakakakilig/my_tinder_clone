@@ -4,7 +4,7 @@ from infrastructure.kafka.init import get_kafka_producer
 from infrastructure.kafka.producer import KafkaProducer
 from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
 from presentation.dependencies.db_session import get_db_session
-from sqlalchemy.ext.asyncio import AsyncSession
+from use_cases.profile import ProfileService
 
 
 def get_profile_service(

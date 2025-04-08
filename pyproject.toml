@@ -32,7 +32,7 @@ ignore = ["TRY301", "RUF010", "RUF100", "RET504", "PLR1711"]
 "*/alembic/**/*" = ["ALL"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["application", "config", "domain", "infrastructure", "presentation", "utils"]
+known-first-party = ["application", "config", "domain", "infrastructure", "presentation", "utils", "use_cases"]
 known-third-party = ["faker", "fastapi", "httpx", "redis", "sqlalchemy[asyncio]", "uvicorn"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 combine-as-imports = true

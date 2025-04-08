@@ -1,5 +1,5 @@
-from application.schemas.profile import ProfileReadSchema
 from domain.models.profile import Profile
+from presentation.schemas.profile import ProfileReadSchema
 
 
 def profile_to_read_schema(profile: Profile) -> ProfileReadSchema:

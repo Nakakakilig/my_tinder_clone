@@ -2,11 +2,11 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from application.schemas.profile import ProfileCreateSchema, ProfileReadSchema
-from application.services.profile import ProfileService
 from domain.models.profile import Profile
 from presentation.dependencies.profile import get_profile_service
 from presentation.mappers.profile import profile_to_read_schema, profiles_to_read_schema_list
+from presentation.schemas.profile import ProfileCreateSchema, ProfileReadSchema
+from use_cases.profile import ProfileService
 
 router = APIRouter(tags=["profiles"])
 
