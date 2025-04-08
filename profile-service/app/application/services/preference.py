@@ -18,9 +18,7 @@ class PreferenceService:
 
     async def create_preference(self, preference: Preference) -> Preference:
         preference = await self.preference_repository.create_preference(preference)
-        preference_data = PreferenceCreateSchema.model_validate(
-            preference.__dict__
-        ).model_dump()
+        preference_data = PreferenceCreateSchema.model_validate(preference.__dict__).model_dump()
 
         event = {
             "event_type": "preference_created",
