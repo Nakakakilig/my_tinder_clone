@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from application.schemas.preference import PreferenceCreateSchema
 from config.settings import settings
 from domain.models.preference import Preference
 from domain.repositories.preference import IPreferenceRepository
 from infrastructure.kafka.producer import KafkaProducer
+from presentation.schemas.preference import PreferenceCreateSchema
 
 
 class PreferenceService:
