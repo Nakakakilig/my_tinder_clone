@@ -1,13 +1,15 @@
-from application.services.preference import PreferenceService
-from application.schemas.preference import PreferenceCreateSchema, PreferenceReadSchema
-from fastapi import APIRouter, Depends
-from presentation.dependencies.preference import get_preference_service
 from typing import Annotated
+
+from fastapi import APIRouter, Depends
+
+from application.schemas.preference import PreferenceCreateSchema, PreferenceReadSchema
+from application.services.preference import PreferenceService
+from presentation.dependencies.preference import get_preference_service
 
 router = APIRouter(tags=["preferences"])
 
 
-@router.get("/", response_model=list[PreferenceReadSchema])
+@router.get("/")
 async def get_preferences(
     preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ) -> list[PreferenceReadSchema] | None:
