@@ -14,7 +14,13 @@ class UserRepositoryImpl(IUserRepository):
         stmt = select(UserORM).where(UserORM.id == user_id)
         result = await self.db_session.execute(stmt)
         user_orm = result.scalar_one_or_none()
-        return user_orm
+    async def get_user_by_username(self, username: str) -> User | None:
+        stmt = select(UserORM).where(UserORM.username == username)
+        result = await self.db_session.execute(stmt)
+        user_orm = result.scalar_one_or_none()
+        if user_orm is None:
+            return None
+        return orm_to_domain(user_orm)
 
     async def create_user(self, user: User) -> User:
         user_orm = UserORM(**user.model_dump())

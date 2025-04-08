@@ -31,4 +31,12 @@ async def get_user(
     user_id: int,
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema | None:
-    return await user_service.get_user_by_id(user_id)
+@router.get("/username/{username}")
+async def get_user_by_username(
+    username: str,
+    user_service: Annotated[UserService, Depends(get_user_service)],
+) -> UserReadSchema | None:
+    user = await user_service.get_user_by_username(username)
+    if user is None:
+        return None
+    return user_to_read_schema(user)
