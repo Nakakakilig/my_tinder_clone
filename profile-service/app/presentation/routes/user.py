@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 
 from domain.models.user import User
 from presentation.dependencies.user import get_user_service
@@ -36,7 +36,7 @@ async def get_users(
 
 @router.get("/{user_id}")
 async def get_user(
-    user_id: int,
+    user_id: Annotated[int, Path(gt=0)],
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema | None:
     user = await user_service.get_user_by_id(user_id)
@@ -47,7 +47,7 @@ async def get_user(
 
 @router.get("/username/{username}")
 async def get_user_by_username(
-    username: str,
+    username: Annotated[str, Path(min_length=1, max_length=20)],
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema | None:
     user = await user_service.get_user_by_username(username)
