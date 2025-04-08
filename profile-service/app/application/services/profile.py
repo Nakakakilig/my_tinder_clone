@@ -27,11 +27,11 @@ class ProfileService:
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return profile
 
-    async def get_profile_by_id(self, profile_id: int) -> Profile:
+    async def get_profile_by_id(self, profile_id: int) -> Profile | None:
         return await self.profile_repository.get_profile_by_id(profile_id)
 
-    async def get_profile_by_user_id(self, user_id: int) -> Profile:
+    async def get_profile_by_user_id(self, user_id: int) -> Profile | None:
         return await self.profile_repository.get_profile_by_user_id(user_id)
 
-    async def get_profiles(self) -> list[Profile]:
+    async def get_profiles(self) -> list[Profile] | None:
         return await self.profile_repository.get_profiles()
