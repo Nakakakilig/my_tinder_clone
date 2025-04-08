@@ -1,5 +1,6 @@
 import json
 from enum import Enum
+from typing import Any
 
 from aiokafka import AIOKafkaProducer  # type: ignore
 
@@ -30,7 +31,7 @@ class KafkaProducer:
             await self._producer.stop()
             self._producer = None
 
-    async def send_event(self, topic: str, event: BaseModel):
+    async def send_event(self, topic: str, event: dict[str, Any]):
         if not self._producer:
             await self.start()
         await self.producer.send_and_wait(topic, event)  # type: ignore
