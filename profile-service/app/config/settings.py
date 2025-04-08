@@ -47,4 +47,4 @@ class Settings(BaseSettings):
     kafka: KafkaConfig = KafkaConfig()
 
 
-settings = Settings()
+settings = Settings()  # type: ignore
