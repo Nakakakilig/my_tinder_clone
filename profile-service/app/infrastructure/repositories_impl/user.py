@@ -1,7 +1,8 @@
-from domain.models.user import User
-from domain.repositories.user import IUserRepository
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from domain.models.user import User
+from domain.repositories.user import IUserRepository
 from infrastructure.db.db_models import UserORM
 
 

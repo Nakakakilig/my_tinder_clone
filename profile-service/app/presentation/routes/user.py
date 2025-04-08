@@ -1,6 +1,7 @@
+from fastapi import APIRouter, Depends
+
 from application.schemas.user import UserCreateSchema, UserReadSchema
 from application.services.user import UserService
-from fastapi import APIRouter, Depends
 from presentation.dependencies.user import get_user_service
 
 router = APIRouter(tags=["users"])
