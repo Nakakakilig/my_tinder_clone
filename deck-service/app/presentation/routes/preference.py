@@ -3,7 +3,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 
-from application.services.preference import PreferenceService
 from domain.exceptions import PreferenceForProfileNotFoundError, PreferenceNotFoundError
 from presentation.dependencies.preference import get_preference_service
 from presentation.mappers.preference import (
@@ -11,6 +10,7 @@ from presentation.mappers.preference import (
     preferences_to_read_schema_list,
 )
 from presentation.schemas.preference import PreferenceReadSchema
+from use_cases.preference import PreferenceService
 
 router = APIRouter(tags=["preferences"])
 
