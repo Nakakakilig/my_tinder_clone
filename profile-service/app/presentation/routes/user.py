@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends
 
 from application.schemas.user import UserCreateSchema, UserReadSchema
 from application.services.user import UserService
+from domain.models.user import User
 from presentation.dependencies.user import get_user_service
+from presentation.mappers.user import user_to_read_schema, users_to_read_schema_list
 
 router = APIRouter(tags=["users"])
 
@@ -15,15 +17,19 @@ async def create_user(
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema:
     # TODO: somehow create profile after user creation
-    user = await user_service.create_user(user_create)
-    return user
+    user_model = User(**user_create.model_dump())
+    user = await user_service.create_user(user_model)
+    return user_to_read_schema(user)
 
 
 @router.get("/")
 async def get_users(
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> list[UserReadSchema] | None:
-    return await user_service.get_users()
+    users = await user_service.get_users()
+    if users is None:
+        return None
+    return users_to_read_schema_list(users)
 
 
 @router.get("/{user_id}")
@@ -31,6 +37,12 @@ async def get_user(
     user_id: int,
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadSchema | None:
+    user = await user_service.get_user_by_id(user_id)
+    if user is None:
+        return None
+    return user_to_read_schema(user)
+
+
 @router.get("/username/{username}")
 async def get_user_by_username(
     username: str,
