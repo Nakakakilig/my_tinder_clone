@@ -1,11 +1,11 @@
+from dataclasses import dataclass
 from datetime import datetime
 
 from domain.enums import Gender
-from pydantic import BaseModel
 
 
-class Preference(BaseModel):
-    id: int
+@dataclass
+class Preference:
     profile_id: int
     gender: Gender
     age: int
