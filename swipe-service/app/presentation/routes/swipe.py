@@ -3,7 +3,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from pydantic import BaseModel, ValidationError
 
-from application.services.swipe import SwipeService
 from config.settings import settings
 from domain.exceptions import SwipeCreateError
 from domain.models.swipe import Swipe
@@ -13,6 +12,7 @@ from presentation.mappers.swipe import (
     swipes_to_read_schema_list,
 )
 from presentation.schemas.swipe import SwipeCreateSchema, SwipeReadSchema
+from use_cases.swipe import SwipeService
 
 router = APIRouter(tags=["swipes"])
 
