@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
+from exception_handler import add_exception_handler
 from fastapi import FastAPI
 
 from config.settings import settings
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app = add_exception_handler(app)
 app.include_router(
     router,
 )
