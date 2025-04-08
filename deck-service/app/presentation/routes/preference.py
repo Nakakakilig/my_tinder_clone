@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 
 from domain.exceptions import PreferenceForProfileNotFoundError, PreferenceNotFoundError
 from presentation.dependencies.preference import get_preference_service
@@ -26,7 +26,7 @@ async def get_preferences(
 
 @router.get("/{preference_id}")
 async def get_preference_by_id(
-    preference_id: int,
+    preference_id: Annotated[int, Path(gt=0)],
     preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ) -> PreferenceReadSchema:
     preference = await preference_service.get_preference_by_id(preference_id)
@@ -37,7 +37,7 @@ async def get_preference_by_id(
 
 @router.get("/profile/{profile_id}")
 async def get_preference_by_profile_id(
-    profile_id: int,
+    profile_id: Annotated[int, Path(gt=0)],
     preference_service: Annotated[PreferenceService, Depends(get_preference_service)],
 ) -> PreferenceReadSchema:
     preference = await preference_service.get_preference_by_profile_id(profile_id)

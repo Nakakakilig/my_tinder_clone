@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 
 from domain.exceptions import ProfileNotFoundError
 from presentation.dependencies.profile import get_profile_service
@@ -23,7 +23,7 @@ async def get_profiles(
 
 @router.get("/{profile_id}")
 async def get_profile(
-    profile_id: int,
+    profile_id: Annotated[int, Path(gt=0)],
     profile_service: Annotated[ProfileService, Depends(get_profile_service)],
 ) -> ProfileReadSchema:
     profile = await profile_service.get_profile_by_id(profile_id)
