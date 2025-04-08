@@ -3,13 +3,13 @@ import random
 
 from faker import Faker
 
-from application.schemas.profile import ProfileCreateSchema
-from application.services.profile import ProfileService
 from domain.enums import Gender
 from domain.models.profile import Profile
 from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.init import get_kafka_producer
 from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
+from presentation.schemas.profile import ProfileCreateSchema
+from use_cases.profile import ProfileService
 
 fake = Faker("uk_UA")
 
