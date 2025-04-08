@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-
 from config.settings import settings
 from presentation.routes.preference import router as preference_router
 from presentation.routes.profiles import router as profile_router
