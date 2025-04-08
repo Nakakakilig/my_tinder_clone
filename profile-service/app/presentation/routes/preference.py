@@ -3,13 +3,13 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from application.schemas.preference import PreferenceCreateSchema, PreferenceReadSchema
-from application.services.preference import PreferenceService
 from domain.models.preference import Preference
 from presentation.dependencies.preference import get_preference_service
 from presentation.mappers.preference import (
     preference_to_read_schema,
     preferences_to_read_schema_list,
 )
+from use_cases.preference import PreferenceService
 
 router = APIRouter(tags=["preferences"])
 
