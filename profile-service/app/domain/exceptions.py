@@ -9,9 +9,11 @@ class UserCreateError(Exception):
 
 
 class UserNotFoundError(Exception):
-    def __init__(self, user_id: int | None = None):
+    def __init__(self, user_id: int | None = None, username: str | None = None):
         if user_id:
             super().__init__(f"User {user_id} not found")
+        elif username:
+            super().__init__(f"User {username} not found")
         else:
             super().__init__("Users not found")
 
