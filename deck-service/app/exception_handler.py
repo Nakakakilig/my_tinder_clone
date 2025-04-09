@@ -16,6 +16,12 @@ from domain.exceptions import (
     ProfileCreateError,
     ProfileNotFoundError,
 )
+from infrastructure.swipe_client.exceptions import (
+    SwipeClientError,
+    SwipeHTTPError,
+    SwipeRequestError,
+    SwipeUnexpectedError,
+)
 
 
 def add_exception_handler(app: FastAPI) -> FastAPI:
@@ -100,6 +106,34 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
     async def _(request: Request, exc: ProfileNotFoundError):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeClientError)
+    async def _(request: Request, exc: SwipeClientError):
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeHTTPError)
+    async def _(request: Request, exc: SwipeHTTPError):
+        return JSONResponse(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeRequestError)
+    async def _(request: Request, exc: SwipeRequestError):
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeUnexpectedError)
+    async def _(request: Request, exc: SwipeUnexpectedError):
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": str(exc)},
         )
 
