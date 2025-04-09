@@ -12,11 +12,13 @@ dependencies = [
     "faker>=36.1.1",
     "fastapi>=0.115.9",
     "httpx>=0.28.1",
+    "logging>=0.4.9.6",
     "pre-commit>=4.1.0",
     "pydantic-settings>=2.8.1",
     "redis>=5.2.1",
     "ruff>=0.11.2",
     "sqlalchemy[asyncio]>=2.0.38",
+    "uuid>=1.30",
     "uvicorn>=0.34.0",
 ]
 
@@ -26,14 +28,37 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "B", "W", "UP", "RUF", "FAST", "ASYNC", "SIM", "RET",  "C4", "A", "PL", "TRY"]
-ignore = ["TRY301", "RUF010", "RUF100", "RET504", "PLR1711"]
+ignore = [
+    "TRY301",
+    "RUF010",
+    "RUF100",
+    "RET504",
+    "PLR1711",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "*/alembic/**/*" = ["ALL"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["application", "config", "domain", "infrastructure", "presentation", "utils", "use_cases"]
-known-third-party = ["faker", "fastapi", "httpx", "redis", "sqlalchemy[asyncio]", "uvicorn"]
+known-first-party = [
+    "application",
+    "config",
+    "domain",
+    "infrastructure",
+    "presentation",
+    "utils",
+    "use_cases",
+]
+known-third-party = [
+    "faker",
+    "fastapi",
+    "httpx",
+    "redis",
+    "sqlalchemy[asyncio]",
+    "uvicorn",
+    "logging",
+    "uuid",
+]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 combine-as-imports = true
 split-on-trailing-comma = true
