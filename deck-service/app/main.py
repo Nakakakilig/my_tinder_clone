@@ -5,6 +5,7 @@ from exception_handler import add_exception_handler
 from fastapi import FastAPI
 
 from config.settings import settings
+from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.consumer import start_consumer_loop
 from infrastructure.middleware import CorrelationIdMiddleware
 from presentation.routes.main import router
@@ -16,6 +17,8 @@ async def lifespan(app: FastAPI):
     configure_logging()
     await start_consumer_loop()  # type: ignore
     yield
+    print("dispose engine")
+    await db_helper.dispose()
 
 
 app = FastAPI(lifespan=lifespan)
