@@ -1,10 +1,10 @@
+from dataclasses import dataclass
 from datetime import datetime
 
-from pydantic import BaseModel
 
-
-class User(BaseModel):
-    id: int
+@dataclass
+class User:
     username: str
-    created_at: datetime
-    updated_at: datetime
+    id: int | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None

@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from application.schemas.profile import ProfileCreateSchema
 from config.settings import settings
 from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.kafka.producer import KafkaProducer
+from presentation.schemas.profile import ProfileCreateSchema
 
 
 class ProfileService:
@@ -18,6 +18,7 @@ class ProfileService:
 
     async def create_profile(self, profile: Profile) -> Profile:
         profile = await self.profile_repository.create_profile(profile)
+        # todo:  bad idea, now I depend on implementation, not on interface
         profile_data = ProfileCreateSchema.model_validate(profile.__dict__).model_dump()
         event = {
             "event_type": "profile_created",
@@ -27,11 +28,11 @@ class ProfileService:
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
         return profile
 
-    async def get_profile_by_id(self, profile_id: int) -> Profile:
+    async def get_profile_by_id(self, profile_id: int) -> Profile | None:
         return await self.profile_repository.get_profile_by_id(profile_id)
 
-    async def get_profile_by_user_id(self, user_id: int) -> Profile:
+    async def get_profile_by_user_id(self, user_id: int) -> Profile | None:
         return await self.profile_repository.get_profile_by_user_id(user_id)
 
-    async def get_profiles(self) -> list[Profile]:
-        return await self.profile_repository.get_profiles()
+    async def get_profiles(self, limit: int, offset: int) -> list[Profile] | None:
+        return await self.profile_repository.get_profiles(limit, offset)

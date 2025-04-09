@@ -13,7 +13,7 @@ class IPreferenceRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_preferences(self) -> list[Preference] | None:
+    async def get_preferences(self, limit: int, offset: int) -> list[Preference] | None:
         raise NotImplementedError
 
     @abstractmethod

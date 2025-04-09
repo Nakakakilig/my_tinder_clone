@@ -2,11 +2,11 @@ import asyncio
 import contextlib
 import random
 
-from application.schemas.swipe import SwipeCreateSchema
 from domain.exceptions import SwipeAlreadyExistsError
 from domain.models.swipe import Swipe
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.swipe import SwipeRepositoryImpl
+from presentation.schemas.swipe import SwipeCreateSchema
 
 
 async def create_swipes_between_profiles(n_profiles: int = 100):

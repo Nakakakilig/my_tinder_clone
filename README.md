@@ -41,7 +41,7 @@ This repository is split into multiple microservices:
 ## Folder Structure in Each Microservice
 
 -  **_domain/_**: Domain models, business logic, and abstract interfaces (repositories, etc.)
--  **_application/_**: Use cases/services that orchestrate domain logic
+-  **_use_cases/_**: Use cases/services that orchestrate domain logic
 -  **_infrastructure/_**: Implementations of repositories, database adapters, Kafka integration, etc.
 -  **_presentation/_**: HTTP routes (endpoints), Pydantic request/response schemas
 
@@ -63,7 +63,7 @@ Additionally:
 
 ## Development Plan
 
- - [ ] Improve **error handling**
+ - [x] Improve **error handling**
 
  - [ ] **Logging** (with trace id)
 

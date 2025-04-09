@@ -51,9 +51,9 @@ class PreferenceRepositoryImpl(IPreferenceRepository):
         except Exception as e:
             raise PreferenceNotFoundError(profile_id) from e
 
-    async def get_preferences(self) -> list[Preference] | None:
+    async def get_preferences(self, limit: int, offset: int) -> list[Preference] | None:
         try:
-            stmt = select(PreferenceORM).order_by(PreferenceORM.id)
+            stmt = select(PreferenceORM).order_by(PreferenceORM.id).offset(offset).limit(limit)
             result = await self.db_session.execute(stmt)
             preferences_orm = result.scalars().all()
             if not preferences_orm:
