@@ -17,10 +17,10 @@ def configure_logging():
         "%(asctime)s | %(levelname)s | corr_id=%(correlation_id)s | %(name)s | %(message)s"
     )
 
-    # console_handler = logging.StreamHandler()  # best practice for ELK
-    # console_handler.setFormatter(formatter)
-    # console_handler.addFilter(CorrelationIdFilter())
-    # logger.addHandler(console_handler)
+    console_handler = logging.StreamHandler()  # best practice for ELK
+    console_handler.setFormatter(formatter)
+    console_handler.addFilter(CorrelationIdFilter())
+    logger.addHandler(console_handler)
 
     file_handler = logging.FileHandler("app.log")  # for local development
     file_handler.setFormatter(formatter)
