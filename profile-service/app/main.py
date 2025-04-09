@@ -7,12 +7,15 @@ from fastapi import FastAPI
 from config.settings import settings
 from infrastructure.db.db_helper import db_helper
 from infrastructure.kafka.init import init_kafka_producer, stop_kafka_producer
+from infrastructure.middleware import CorrelationIdMiddleware
 from presentation.routes.main import router
+from utils.logging import configure_logging
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    configure_logging()
     await init_kafka_producer()
     yield
     # shutdown
@@ -24,6 +27,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app = add_exception_handler(app)
+app.add_middleware(CorrelationIdMiddleware)
 app.include_router(
     router,
 )
