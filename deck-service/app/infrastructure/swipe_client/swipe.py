@@ -1,12 +1,16 @@
 import httpx
+import logging
 
 from domain.repositories.swipe import ISwipeRepository, Swipe
+from infrastructure.middleware import get_correlation_id
 from infrastructure.swipe_client.constants import SWIPE_API_PATHS
 from infrastructure.swipe_client.exceptions import (
     SwipeHTTPError,
     SwipeRequestError,
     SwipeUnexpectedError,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class SwipeClient(ISwipeRepository):
@@ -53,14 +57,19 @@ class SwipeClient(ISwipeRepository):
     @staticmethod
     async def _request(url: str):
         try:
+            correlation_id = get_correlation_id()
+            headers = {"X-Correlation-Id": correlation_id}
             async with httpx.AsyncClient() as client:
-                response = await client.get(url)
+                response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 return response.json()
 
         except httpx.HTTPStatusError as e:
+            logger.exception("Swipe HTTP error")
             raise SwipeHTTPError(e.response.status_code) from e
         except httpx.RequestError as e:
+            logger.exception("Swipe request error")
             raise SwipeRequestError(str(e)) from e
         except Exception as e:
+            logger.exception("Swipe unexpected error")
             raise SwipeUnexpectedError(str(e)) from e

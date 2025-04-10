@@ -7,6 +7,13 @@ from aiokafka.errors import KafkaConnectionError  # type: ignore
 
 from config.settings import settings
 from infrastructure.kafka.events import handle_event
+from infrastructure.middleware import clear_correlation_id, set_correlation_id
+
+"""
+THERE ARE A LOT OF 'type: ignore' HERE BECAUSE OF THE TYPE HINTS IN AIOKAFKA LIBRARY
+
+I'm not sure if this is the best way to do this, but it works for now.
+"""
 
 
 async def consume():
@@ -42,7 +49,13 @@ async def consume():
         print("Kafka consumer started and listening...")
         async for message in consumer:  # type: ignore
             event = message.value  # type: ignore
-            await handle_event(event)  # type: ignore
+            headers = dict(message.headers)  # type: ignore
+            correlation_id = headers["X-Correlation-Id"]
+            set_correlation_id(correlation_id.decode("utf-8"))
+            try:
+                await handle_event(event)  # type: ignore
+            finally:
+                clear_correlation_id()
     finally:
         await consumer.stop()  # type: ignore
 

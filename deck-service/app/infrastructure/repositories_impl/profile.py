@@ -5,7 +5,6 @@ from config.settings import settings
 from domain.exceptions import (
     PreferenceForProfileNotFoundError,
     ProfileAlreadyExistsError,
-    ProfileCreateError,
     ProfileNotFoundError,
 )
 from domain.models.profile import Profile
@@ -20,39 +19,30 @@ class ProfileRepositoryImpl(IProfileRepository):
         self.db_session = db_session
 
     async def get_profile_by_id(self, profile_id: int) -> Profile | None:
-        try:
-            stmt = select(ProfileORM).where(ProfileORM.outer_id == profile_id)
-            result = await self.db_session.execute(stmt)
-            profile_orm = result.scalar_one_or_none()
-            if profile_orm is None:
-                return None
-            return orm_to_domain(profile_orm)
-        except Exception as e:
-            raise ProfileNotFoundError(profile_id) from e
+        stmt = select(ProfileORM).where(ProfileORM.outer_id == profile_id)
+        result = await self.db_session.execute(stmt)
+        profile_orm = result.scalar_one_or_none()
+        if profile_orm is None:
+            return None
+        return orm_to_domain(profile_orm)
 
     async def create_profile(self, profile: Profile) -> Profile:
-        try:
-            existing_profile = await self.get_profile_by_id(profile.outer_id)
-            if existing_profile:
-                raise ProfileAlreadyExistsError(profile.outer_id)
-            profile_orm = domain_to_orm(profile)
-            self.db_session.add(profile_orm)
-            await self.db_session.commit()
-            await self.db_session.refresh(profile_orm)
-            return orm_to_domain(profile_orm)
-        except Exception as e:
-            raise ProfileCreateError() from e
+        existing_profile = await self.get_profile_by_id(profile.outer_id)
+        if existing_profile:
+            raise ProfileAlreadyExistsError(profile.outer_id)
+        profile_orm = domain_to_orm(profile)
+        self.db_session.add(profile_orm)
+        await self.db_session.commit()
+        await self.db_session.refresh(profile_orm)
+        return orm_to_domain(profile_orm)
 
     async def get_profiles(self, limit: int, offset: int) -> list[Profile] | None:
-        try:
-            stmt = select(ProfileORM).order_by(ProfileORM.id).offset(offset).limit(limit)
-            result = await self.db_session.execute(stmt)
-            profiles_orm = result.scalars().all()
-            if not profiles_orm:
-                return None
-            return [orm_to_domain(profile_orm) for profile_orm in profiles_orm]
-        except Exception as e:
-            raise ProfileNotFoundError() from e
+        stmt = select(ProfileORM).order_by(ProfileORM.id).offset(offset).limit(limit)
+        result = await self.db_session.execute(stmt)
+        profiles_orm = result.scalars().all()
+        if not profiles_orm:
+            return None
+        return [orm_to_domain(profile_orm) for profile_orm in profiles_orm]
 
     async def get_candidates_and_distance(
         self, profile_id: int, limit: int

@@ -20,7 +20,7 @@ async def create_multiple_preferences(
             profile_id=i,
             gender=random.choice(list(Gender)),
             age=random.randint(18, 60),
-            radius=random.randint(0, 400),
+            radius=random.randint(1, 400),
         )
         for i in range(1, n_preferences + 1)
     ]

@@ -1,3 +1,4 @@
+import logging
 from aiokafka.errors import KafkaConnectionError  # type: ignore
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
@@ -16,11 +17,20 @@ from domain.exceptions import (
     ProfileCreateError,
     ProfileNotFoundError,
 )
+from infrastructure.swipe_client.exceptions import (
+    SwipeClientError,
+    SwipeHTTPError,
+    SwipeRequestError,
+    SwipeUnexpectedError,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def add_exception_handler(app: FastAPI) -> FastAPI:
     @app.exception_handler(CandidateNotFoundError)
     async def _(request: Request, exc: CandidateNotFoundError):
+        logger.exception("Candidate not found error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"detail": str(exc)},
@@ -28,6 +38,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(DeckNotFoundError)
     async def _(request: Request, exc: DeckNotFoundError):
+        logger.exception("Deck not found error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"detail": str(exc)},
@@ -35,6 +46,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(DeckGenerateError)
     async def _(request: Request, exc: DeckGenerateError):
+        logger.exception("Deck generate error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": str(exc)},
@@ -42,6 +54,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(DeckCacheError)
     async def _(request: Request, exc: DeckCacheError):
+        logger.exception("Deck cache error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": str(exc)},
@@ -49,6 +62,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(DeckCacheClearError)
     async def _(request: Request, exc: DeckCacheClearError):
+        logger.exception("Deck cache clear error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": str(exc)},
@@ -56,6 +70,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(PreferenceAlreadyExistsError)
     async def _(request: Request, exc: PreferenceAlreadyExistsError):
+        logger.exception("Preference already exists error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
             content={"detail": str(exc)},
@@ -63,6 +78,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(PreferenceCreateError)
     async def _(request: Request, exc: PreferenceCreateError):
+        logger.exception("Preference create error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": str(exc)},
@@ -70,6 +86,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(PreferenceNotFoundError)
     async def _(request: Request, exc: PreferenceNotFoundError):
+        logger.exception("Preference not found error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"detail": str(exc)},
@@ -77,6 +94,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(PreferenceForProfileNotFoundError)
     async def _(request: Request, exc: PreferenceForProfileNotFoundError):
+        logger.exception("Preference for profile not found error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"detail": str(exc)},
@@ -84,6 +102,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(ProfileAlreadyExistsError)
     async def _(request: Request, exc: ProfileAlreadyExistsError):
+        logger.exception("Profile already exists error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
             content={"detail": str(exc)},
@@ -91,6 +110,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(ProfileCreateError)
     async def _(request: Request, exc: ProfileCreateError):
+        logger.exception("Profile create error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": str(exc)},
@@ -98,13 +118,47 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(ProfileNotFoundError)
     async def _(request: Request, exc: ProfileNotFoundError):
+        logger.exception("Profile not found error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"detail": str(exc)},
         )
 
+    @app.exception_handler(SwipeClientError)
+    async def _(request: Request, exc: SwipeClientError):
+        logger.exception("Swipe client error: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeHTTPError)
+    async def _(request: Request, exc: SwipeHTTPError):
+        logger.exception("Swipe HTTP error: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeRequestError)
+    async def _(request: Request, exc: SwipeRequestError):
+        logger.exception("Swipe request error: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            content={"detail": str(exc)},
+        )
+
+    @app.exception_handler(SwipeUnexpectedError)
+    async def _(request: Request, exc: SwipeUnexpectedError):
+        logger.exception("Swipe unexpected error: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": str(exc)},
+        )
+
     @app.exception_handler(ConnectionRefusedError)
     async def _(request: Request, exc: ConnectionRefusedError):
+        logger.critical("Connection to DB refused: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={"detail": "Connection to DB refused"},
@@ -112,6 +166,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(KafkaConnectionError)
     async def _(request: Request, exc: KafkaConnectionError):
+        logger.critical("Connection to Kafka refused: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={"detail": "Connection to Kafka refused"},
@@ -119,6 +174,7 @@ def add_exception_handler(app: FastAPI) -> FastAPI:
 
     @app.exception_handler(Exception)
     async def _(request: Request, exc: Exception):
+        logger.exception("Internal server error: %s", exc)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": "Internal server error."},

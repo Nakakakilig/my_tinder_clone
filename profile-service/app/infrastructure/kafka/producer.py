@@ -2,7 +2,12 @@ import json
 from enum import Enum
 from typing import Any
 
+import logging
 from aiokafka import AIOKafkaProducer  # type: ignore
+
+from infrastructure.middleware import get_correlation_id
+
+logger = logging.getLogger(__name__)
 
 
 class KafkaProducer:
@@ -28,10 +33,24 @@ class KafkaProducer:
 
     async def stop(self):
         if self._producer:
-            await self._producer.stop()
+            await self._producer.stop()  # type: ignore
             self._producer = None
 
     async def send_event(self, topic: str, event: dict[str, Any]):
         if not self._producer:
             await self.start()
-        await self.producer.send_and_wait(topic, event)  # type: ignore
+
+        headers = [
+            ("X-Correlation-Id", get_correlation_id().encode("utf-8")),
+        ]
+        logger.info("Sending event to topic: %s", topic)
+        try:
+            await self.producer.send_and_wait(  # type: ignore
+                topic,
+                event,
+                headers=headers,
+            )
+            logger.info("Event sent to topic: %s", topic)
+        except Exception as e:
+            logger.exception(f"Error sending event to topic: {topic}")
+            raise e  # noqa: TRY201

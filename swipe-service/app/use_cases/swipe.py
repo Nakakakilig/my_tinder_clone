@@ -1,5 +1,9 @@
+import logging
+
 from domain.models.swipe import Swipe
 from domain.repositories.swipe import ISwipeRepository
+
+logger = logging.getLogger(__name__)
 
 
 class SwipeService:
@@ -10,8 +14,10 @@ class SwipeService:
         self.swipe_repository = swipe_repository
 
     async def create_swipe(self, swipe: Swipe) -> Swipe:
-        swipe = await self.swipe_repository.create_swipe(swipe)
-        return swipe
+        logger.info("Creating swipe: %s", swipe.id)
+        created_swipe = await self.swipe_repository.create_swipe(swipe)
+        logger.info("Swipe created: %s", created_swipe.id)
+        return created_swipe
 
     async def get_swipes(self, limit: int, offset: int) -> list[Swipe] | None:
         return await self.swipe_repository.get_swipes(limit, offset)

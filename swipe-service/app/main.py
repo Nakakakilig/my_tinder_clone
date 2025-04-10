@@ -6,12 +6,15 @@ from fastapi import FastAPI
 
 from config.settings import settings
 from infrastructure.db.db_helper import db_helper
+from infrastructure.middleware import CorrelationIdMiddleware
 from presentation.routes.main import router
+from utils.logging import configure_logging
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    configure_logging()
     yield
     # shutdown
     print("dispose engine")
@@ -20,6 +23,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app = add_exception_handler(app)
+app.add_middleware(CorrelationIdMiddleware)
 app.include_router(
     router,
 )
