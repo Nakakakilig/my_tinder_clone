@@ -65,7 +65,7 @@ Additionally:
 
  - [x] Improve **error handling**
 
- - [ ] **Logging** (with trace id)
+ - [x] **Logging** (with trace id)
 
  - [ ] **Testing**
 
