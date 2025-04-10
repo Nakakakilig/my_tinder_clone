@@ -21,7 +21,7 @@ profile_id=$(
   "first_name": "string",
   "last_name": "string",
   "gender": "male",
-  "age": 0,
+  "age": 24,
   "geo_latitude": 0,
   "geo_longitude": 0
 }'| jq -r '.id'
@@ -34,6 +34,6 @@ curl -X 'POST' \
   -d '{
   "profile_id": '"$profile_id"',
   "gender": "male",
-  "age": 0,
-  "radius": 0
+  "age": 35,
+  "radius": 157
 }'
