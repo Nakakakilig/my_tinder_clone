@@ -1,10 +1,14 @@
 from datetime import datetime
 
+import logging
+
 from config.settings import settings
 from domain.models.profile import Profile
 from domain.repositories.profile import IProfileRepository
 from infrastructure.kafka.producer import KafkaProducer
 from presentation.schemas.profile import ProfileCreateSchema
+
+logger = logging.getLogger(__name__)
 
 
 class ProfileService:
@@ -17,6 +21,8 @@ class ProfileService:
         self.kafka_producer = kafka_producer
 
     async def create_profile(self, profile: Profile) -> Profile:
+        logger.info("Creating profile for user: %s", profile.user_id)
+
         profile = await self.profile_repository.create_profile(profile)
         # todo:  bad idea, now I depend on implementation, not on interface
         profile_data = ProfileCreateSchema.model_validate(profile.__dict__).model_dump()
@@ -26,6 +32,8 @@ class ProfileService:
             "timestamp": datetime.now().isoformat(),
         }
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
+
+        logger.info("Profile created: %s", profile.user_id)
         return profile
 
     async def get_profile_by_id(self, profile_id: int) -> Profile | None:

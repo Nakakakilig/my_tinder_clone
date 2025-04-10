@@ -1,10 +1,14 @@
 from datetime import datetime
 
+import logging
+
 from config.settings import settings
 from domain.models.preference import Preference
 from domain.repositories.preference import IPreferenceRepository
 from infrastructure.kafka.producer import KafkaProducer
 from presentation.schemas.preference import PreferenceCreateSchema
+
+logger = logging.getLogger(__name__)
 
 
 class PreferenceService:
@@ -17,6 +21,8 @@ class PreferenceService:
         self.kafka_producer = kafka_producer
 
     async def create_preference(self, preference: Preference) -> Preference:
+        logger.info("Creating preference for profile: %s", preference.profile_id)
+
         preference = await self.preference_repository.create_preference(preference)
         # todo:  bad idea, now I depend on implementation, not on interface
         preference_data = PreferenceCreateSchema.model_validate(preference.__dict__).model_dump()
@@ -26,6 +32,8 @@ class PreferenceService:
             "timestamp": datetime.now().isoformat(),
         }
         await self.kafka_producer.send_event(settings.kafka.profile_topic, event)
+
+        logger.info("Preference created for profile: %s", preference.profile_id)
         return preference
 
     async def get_preference_by_id(self, preference_id: int) -> Preference | None:

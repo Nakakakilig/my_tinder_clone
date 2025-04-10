@@ -1,5 +1,9 @@
+import logging
+
 from domain.models.preference import Preference
 from domain.repositories.preference import IPreferenceRepository
+
+logger = logging.getLogger(__name__)
 
 
 class PreferenceService:
@@ -19,4 +23,7 @@ class PreferenceService:
         return await self.preference_repository.get_preferences(limit, offset)
 
     async def create_preference(self, preference: Preference) -> Preference | None:
-        return await self.preference_repository.create_preference(preference)
+        logger.info("Creating preference for profile: %s", preference.profile_id)
+        preference = await self.preference_repository.create_preference(preference)
+        logger.info("Preference created for profile: %s", preference.profile_id)
+        return preference
