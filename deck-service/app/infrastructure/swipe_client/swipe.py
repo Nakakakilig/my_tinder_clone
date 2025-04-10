@@ -1,4 +1,5 @@
 import httpx
+import logging
 
 from domain.repositories.swipe import ISwipeRepository, Swipe
 from infrastructure.middleware import get_correlation_id
@@ -8,6 +9,8 @@ from infrastructure.swipe_client.exceptions import (
     SwipeRequestError,
     SwipeUnexpectedError,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class SwipeClient(ISwipeRepository):
@@ -62,8 +65,11 @@ class SwipeClient(ISwipeRepository):
                 return response.json()
 
         except httpx.HTTPStatusError as e:
+            logger.exception("Swipe HTTP error")
             raise SwipeHTTPError(e.response.status_code) from e
         except httpx.RequestError as e:
+            logger.exception("Swipe request error")
             raise SwipeRequestError(str(e)) from e
         except Exception as e:
+            logger.exception("Swipe unexpected error")
             raise SwipeUnexpectedError(str(e)) from e
