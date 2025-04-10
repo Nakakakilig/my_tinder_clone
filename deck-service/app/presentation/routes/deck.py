@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, Path, Query, status
 
 from config.settings import settings
 from domain.models.deck import MatchDeck
@@ -31,7 +31,10 @@ async def get_deck(
 async def generate_deck(
     profile_id: Annotated[int, Path(gt=0)],
     deck_service: Annotated[DeckService, Depends(get_deck_service)],
-    limit: int = settings.deck.limit_matched_profiles,
+    limit: Annotated[
+        int,
+        Query(ge=settings.pagination.min_limit, le=settings.pagination.max_limit),
+    ] = settings.pagination.default_limit,
 ) -> MatchDeck:
     return await deck_service.generate_deck_by_id(profile_id, limit)
 
