@@ -7,6 +7,9 @@ from domain.models.profile import Profile
 from infrastructure.db.db_helper import db_helper
 from infrastructure.repositories_impl.preference import PreferenceRepositoryImpl
 from infrastructure.repositories_impl.profile import ProfileRepositoryImpl
+from use_cases.preference import PreferenceService
+from use_cases.profile import ProfileService
+
 logger = logging.getLogger(__name__)
 
 
@@ -42,15 +45,24 @@ async def handle_profile_created(
 ):
     logger.info("Handling profile created event")
     async with db_helper.session_factory() as session:
-        profile_schema = ProfileCreateSchema(**data)
-        profile = Profile(**profile_schema.model_dump())
-        await ProfileRepositoryImpl(session).create_profile(profile)
+        profile_service = ProfileService(
+            profile_repository=ProfileRepositoryImpl(session),
+        )
+        data["outer_id"] = data["user_id"]
+        del data["user_id"]
+        profile = Profile(
+            **{key: value for key, value in data.items() if key in Profile.__annotations__}
+        )
+        await profile_service.create_profile(profile)
 
 
 async def handle_preference_created(
     data: dict[str, Any],
 ):
+    logger.info("Handling preference created event")
     async with db_helper.session_factory() as session:
-        preference_schema = PreferenceCreateSchema(**data)
-        preference = Preference(**preference_schema.model_dump())
-        await PreferenceRepositoryImpl(session).create_preference(preference)
+        preference_service = PreferenceService(
+            preference_repository=PreferenceRepositoryImpl(session),
+        )
+        preference = Preference(**data)
+        await preference_service.create_preference(preference)
