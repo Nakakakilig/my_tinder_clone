@@ -7,6 +7,11 @@ from aiokafka.errors import KafkaConnectionError  # type: ignore
 
 from config.settings import settings
 from infrastructure.kafka.events import handle_event
+"""
+THERE ARE A LOT OF 'type: ignore' HERE BECAUSE OF THE TYPE HINTS IN AIOKAFKA LIBRARY
+
+I'm not sure if this is the best way to do this, but it works for now.
+"""
 
 
 async def consume():
