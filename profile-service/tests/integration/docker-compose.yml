@@ -1,0 +1,15 @@
+services:
+
+  pg-profile:
+    image: postgres
+    environment:
+      POSTGRES_DB: profile-test
+      POSTGRES_USER: user-test
+      POSTGRES_PASSWORD: password-test
+    ports:
+      - "5400:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user-test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
