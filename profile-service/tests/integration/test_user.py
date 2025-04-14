@@ -1,9 +1,9 @@
-import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
+# import pytest
+# from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.domain.models.user import User
-from app.infrastructure.repositories_impl.user import UserRepositoryImpl
-from app.use_cases.user import UserService
+# from app.domain.models.user import User
+# from app.infrastructure.repositories_impl.user import UserRepositoryImpl
+# from app.use_cases.user import UserService
 
 
 # @pytest.mark.asyncio(loop_scope="session")
