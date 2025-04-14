@@ -15,12 +15,17 @@ dependencies = [
     "logging>=0.4.9.6",
     "pre-commit>=4.1.0",
     "pydantic-settings>=2.8.1",
+    "pytest-asyncio>=0.26.0",
     "redis>=5.2.1",
     "ruff>=0.11.2",
     "sqlalchemy[asyncio]>=2.0.38",
     "uuid>=1.30",
     "uvicorn>=0.34.0",
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
 
 [tool.ruff]
 line-length = 100
@@ -48,6 +53,7 @@ known-first-party = [
     "presentation",
     "utils",
     "use_cases",
+    "app",
 ]
 known-third-party = [
     "faker",
@@ -58,6 +64,7 @@ known-third-party = [
     "uvicorn",
     "logging",
     "uuid",
+    "pytest",
 ]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 combine-as-imports = true
