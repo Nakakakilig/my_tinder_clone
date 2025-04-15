@@ -58,7 +58,58 @@ Additionally:
 > ### Note: All microservices are in a single repository to simplify interaction during development. In a production environment, splitting them into separate repositories is generally recommended.
 
 ## 🧩 System Architecture (Mermaid Diagram)
-![alt text](mermaid-diagram-2025-04-15-171534.svg)
+```mermaid
+flowchart TD
+    subgraph Client["Client"]
+        A1["🧑‍💻 React SPA (planned)"]
+    end
+
+    subgraph APILayer["API Layer"]
+        GW["🌐 API Gateway (planned: Traefik)"]
+    end
+
+    subgraph Services["Microservices"]
+        Profile["👤 profile-service (Manages user profiles)"]
+        Deck["🃏 deck-service (Generates matching decks)"]
+        Swipe["💚 swipe-service (Handles swipe actions and matches)"]
+        Auth["🔐 auth-service (planned)"]
+        Notification["🔔 notification-service (planned)"]
+    end
+
+    subgraph DB["PostgreSQL Databases"]
+        DB1["📦 PostgreSQL (Profile)"]
+        DB2["📦 PostgreSQL (Deck)"]
+        DB3["📦 PostgreSQL (Swipe)"]
+    end
+
+    subgraph Infra["Infrastructure"]
+        Redis["🧠 Redis (Cache)"]
+        Kafka["🛰 Kafka (Message Broker)"]
+    end
+
+    A1 --Authentication (Login/Register)--> GW
+    Auth --Generates JWT--> A1
+    A1 --Subsequent requests with Bearer <JWT>--> GW
+
+    GW --> Profile
+    GW --> Deck
+    GW --> Swipe
+
+    GW --Handles Login/Register requests--> Auth
+
+    Profile --Stores/Retrieves profile data--> DB1
+    Profile --Publishes profile data updates--> Kafka
+
+    Deck --Stores deck data--> DB2
+    Deck --Caches deck data--> Redis
+    Kafka --Consumes profile data--> Deck
+
+    Swipe --Stores swipe data--> DB3
+    Swipe --Publishes match events--> Kafka
+
+    Kafka --Consumes swipe events--> Notification
+    Notification --Sends notifications to Client--> A1
+```
 
 
 
