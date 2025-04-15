@@ -70,9 +70,9 @@ flowchart TD
     end
 
     subgraph Services["Microservices"]
-        Profile["👤 profile-service"]
-        Deck["🃏 deck-service"]
-        Swipe["💚 swipe-service"]
+        Profile["👤 profile-service (Manages user profiles)"]
+        Deck["🃏 deck-service (Generates matching decks)"]
+        Swipe["💚 swipe-service (Handles swipe actions and matches)"]
         Auth["🔐 auth-service (planned)"]
         Notification["🔔 notification-service (planned)"]
     end
@@ -83,33 +83,33 @@ flowchart TD
         DB3["📦 PostgreSQL (Swipe)"]
     end
 
-    subgraph Infra["Infra: Redis & Kafka"]
-        Redis["🧠 Redis"]
-        Kafka["🛰 Kafka"]
+    subgraph Infra["Infrastructure"]
+        Redis["🧠 Redis (Cache)"]
+        Kafka["🛰 Kafka (Message Broker)"]
     end
 
-    A1 --> GW
-
-    GW -- "Login/Register" --> Auth
-    Auth -- "JWT" --> A1
-    A1 -- "Bearer <JWT>" --> GW
+    A1 --Authentication (Login/Register)--> GW
+    Auth --Generates JWT--> A1
+    A1 --Subsequent requests with Bearer <JWT>--> GW
 
     GW --> Profile
     GW --> Deck
     GW --> Swipe
 
-    Profile --> DB1
-    Profile -- "New profile & preferences" --> Kafka
+    GW --Handles Login/Register requests--> Auth
 
-    Deck --> DB2
-    Deck -- "Cache deck" --> Redis
-    Kafka -- "Profile & preferences" --> Deck
+    Profile --Stores/Retrieves profile data--> DB1
+    Profile --Publishes profile data updates--> Kafka
 
-    Swipe --> DB3
-    Swipe -- "Match detected" --> Kafka
+    Deck --Stores deck data--> DB2
+    Deck --Caches deck data--> Redis
+    Kafka --Consumes profile data--> Deck
 
-    Kafka -- "Swipe event" --> Notification
-    Notification -- "Send Notification" --> A1
+    Swipe --Stores swipe data--> DB3
+    Swipe --Publishes match events--> Kafka
+
+    Kafka --Consumes swipe events--> Notification
+    Notification --Sends notifications to Client--> A1
 ```
 
 
