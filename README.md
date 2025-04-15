@@ -57,7 +57,7 @@ Additionally:
 
 > ### Note: All microservices are in a single repository to simplify interaction during development. In a production environment, splitting them into separate repositories is generally recommended.
 
-## 🧩 System Architecture (Mermaid Diagram)
+## System Architecture (Mermaid Diagram)
 ```mermaid
 flowchart TD
     subgraph Client["Client"]
