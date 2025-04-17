@@ -85,26 +85,26 @@ flowchart TD
     end
 
     subgraph profile-service["SERVICE PROFILE"]
-        Profile["👤 profile-service (Manages user profiles)"]:::microservices
+        Profile["👤 profile-service (Manages user profiles)"]
         DB1@{ shape: cyl, label: "PostgreSQL", stroke: lightgrey}
-        DB1[(PostgreSQL)]:::databases
+        DB1[(PostgreSQL)]
     end
 
     subgraph deck-service["SERVICE DECK"]
-        Deck["🃏 deck-service (Generates matching decks)"]:::microservices
-        DB2[(PostgreSQL)]:::databases
+        Deck["🃏 deck-service (Generates matching decks)"]
+        DB2[(PostgreSQL)]
         Redis["🧠 Redis (Cache)"]
     end
 
     subgraph swipe-service["SERVICE SWIPE"]
-        Swipe["💚 swipe-service (Handles swipe actions and matches)"]:::microservices
+        Swipe["💚 swipe-service (Handles swipe actions and matches)"]
         decision@{ shape: diamond, label: "if both swipe" }
-        DB3[(PostgreSQL)]:::databases
+        DB3[(PostgreSQL)]
     end
 
-    Auth["🔐 auth-service (planned)"]:::microservices
+    Auth["🔐 auth-service (planned)"]
     Kafka@{ shape: das, label: "🛰 Kafka (Message Broker)"}
-    Notification["🔔 notification-service (planned)"]:::microservices
+    Notification["🔔 notification-service (planned)"]
 
     Swipe ==> decision
     decision ==Publishes match events==> Kafka
@@ -128,10 +128,6 @@ flowchart TD
 
     Kafka ==Consumes match events==> Notification
     Notification ==Sends notifications to Client==> Client
-
-    classDef microservices stroke:#FF0000,
-    classDef databases stroke:#77bba3
-    classDef foo stroke:#bb778f
 ```
 
 
