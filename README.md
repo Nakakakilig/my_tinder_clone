@@ -59,56 +59,79 @@ Additionally:
 
 ## System Architecture (Mermaid Diagram)
 ```mermaid
+%%{
+  init: {
+    "theme": "dark",
+    "fontFamily": "monospace",
+    "fontSize": 20,
+    "logLevel": "info",
+    "flowchart": {
+      "htmlLabels": true,
+      "curve": "linear"
+    },
+    "sequence": {
+      "mirrorActors": true
+    }
+  }
+}%%
+
 flowchart TD
-    subgraph Client["Client"]
-        A1["🧑‍💻 React SPA (planned)"]
+    subgraph Client1["CLIENT"]
+        Client["🧑‍💻 React SPA (planned)"]:::foo
     end
 
     subgraph APILayer["API Layer"]
-        GW["🌐 API Gateway (planned: Traefik)"]
+        GW["🌐 API Gateway (planned)"]:::foo
     end
 
-    subgraph Services["Microservices"]
-        Profile["👤 profile-service (Manages user profiles)"]
-        Deck["🃏 deck-service (Generates matching decks)"]
-        Swipe["💚 swipe-service (Handles swipe actions and matches)"]
-        Auth["🔐 auth-service (planned)"]
-        Notification["🔔 notification-service (planned)"]
+    subgraph profile-service["SERVICE PROFILE"]
+        Profile["👤 profile-service (Manages user profiles)"]:::microservices
+        DB1@{ shape: cyl, label: "PostgreSQL", stroke: lightgrey}
+        DB1[(PostgreSQL)]:::databases
     end
 
-    subgraph DB["PostgreSQL Databases"]
-        DB1["📦 PostgreSQL (Profile)"]
-        DB2["📦 PostgreSQL (Deck)"]
-        DB3["📦 PostgreSQL (Swipe)"]
-    end
-
-    subgraph Infra["Infrastructure"]
+    subgraph deck-service["SERVICE DECK"]
+        Deck["🃏 deck-service (Generates matching decks)"]:::microservices
+        DB2[(PostgreSQL)]:::databases
         Redis["🧠 Redis (Cache)"]
-        Kafka["🛰 Kafka (Message Broker)"]
     end
 
-    A1 --Authentication (Login/Register)--> GW
-    Auth --Generates JWT--> A1
-    A1 --Subsequent requests with Bearer <JWT>--> GW
+    subgraph swipe-service["SERVICE SWIPE"]
+        Swipe["💚 swipe-service (Handles swipe actions and matches)"]:::microservices
+        decision@{ shape: diamond, label: "if both swipe" }
+        DB3[(PostgreSQL)]:::databases
+    end
 
-    GW --> Profile
-    GW --> Deck
-    GW --> Swipe
+    Auth["🔐 auth-service (planned)"]:::microservices
+    Kafka@{ shape: das, label: "🛰 Kafka (Message Broker)"}
+    Notification["🔔 notification-service (planned)"]:::microservices
 
-    GW --Handles Login/Register requests--> Auth
+    Swipe ==> decision
+    decision ==Publishes match events==> Kafka
 
-    Profile --Stores/Retrieves profile data--> DB1
-    Profile --Publishes profile data updates--> Kafka
+    Auth --Generates JWT---> Client
+    Client ==Subsequent requests with Bearer JWT==> GW
 
-    Deck --Stores deck data--> DB2
-    Deck --Caches deck data--> Redis
-    Kafka --Consumes profile data--> Deck
+    GW ==Handles Login/Register requests==> Auth
+    GW ==> Profile
+    GW ==> Deck
+    GW ==> Swipe
+    DB3 --/GET HTTP---> Deck
+    Profile ~~~ Kafka ~~~ Deck
+    Profile ==Publishes profile data updates===> Kafka
+    Profile ==Stores/Retrieves profile data==> DB1
+    Deck ==Stores deck data==> DB2
+    Deck ==Caches deck data==> Redis
+    Kafka ==Consumes profile data==> Deck
 
-    Swipe --Stores swipe data--> DB3
-    Swipe --Publishes match events--> Kafka
+    Swipe ==Stores swipe data==> DB3
 
-    Kafka --Consumes swipe events--> Notification
-    Notification --Sends notifications to Client--> A1
+    Kafka ==Consumes match events==> Notification
+    Notification ==Sends notifications to Client==> Client
+
+    classDef microservices stroke:#FF0000,
+    classDef databases stroke:#77bba3
+    classDef foo stroke:#bb778f
 ```
 
 
