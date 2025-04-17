@@ -1,6 +1,7 @@
 # My Tinder Clone
 
-A pet project that implements simplified functionality similar to Tinder. The main goal is to practice Python (FastAPI, SQLAlchemy), Docker, microservices architecture, Clean Architecture concepts, and deployment. A React SPA frontend is planned.
+A pet project simulating core Tinder functionality – profile browsing, swiping, and matching – built with Python and FastAPI.
+The main goal is to practice Python (FastAPI, SQLAlchemy), Docker, microservices architecture, Clean Architecture concepts, and deployment. A React SPA frontend is planned.
 
 ## Technologies & Stack
 ### Back-end:
@@ -12,6 +13,7 @@ A pet project that implements simplified functionality similar to Tinder. The ma
 - PostgreSQL
 - Kafka (asynchronous messaging)
 - Docker
+- CI/CD
 
 ### Front-end:
 - React SPA (planned)
@@ -20,23 +22,21 @@ A pet project that implements simplified functionality similar to Tinder. The ma
 
 - Follows **Clean Architecture** principles with *Domain* / *Application* / *Infrastructure* / *Presentation* layers.
 
-- Organized as microservices, where each core feature can be isolated into a separate service.
+- Organized as modular microservices – each encapsulates a specific domain responsibility and communicates via Kafka events.
+
+- Each microservice follows a Clean Architecture layout and leverages FastAPI + async SQLAlchemy.
 
 ## Overview
 This repository is split into multiple microservices:
 
-- **profile-service**: Manages user profiles, preferences.
-
-- **deck-service**: Creates candidate decks (match lists).
-
-- **swipe-service**: Records swipes (like/dislike).
-
-- **auth-service**: Authentication & authorization (JWT) (planned).
-
-- **notification-service**: Listens for events (via Kafka) and triggers notifications (planned).
-
-- **client**: React (planned).
-
+| Service             | Description                        | Status       |
+|---------------------|------------------------------------|--------------|
+| profile-service     | Manages profiles and preferences   | ✅ Done       |
+| deck-service        | Generates daily user decks         | ✅ Done       |
+| swipe-service       | Handles swipe actions              | ✅ Done       |
+| auth-service        | Auth (JWT, registration)           | 🟡 Planned    |
+| notification-service| Sends Kafka-based notifications    | 🟡 Planned    |
+| client              | React frontend                     | 🟡 Planned    |
 
 ## Folder Structure in Each Microservice
 
@@ -57,7 +57,82 @@ Additionally:
 
 > ### Note: All microservices are in a single repository to simplify interaction during development. In a production environment, splitting them into separate repositories is generally recommended.
 
+## System Architecture (Mermaid Diagram)
+```mermaid
+%%{
+  init: {
+    "theme": "dark",
+    "fontFamily": "monospace",
+    "fontSize": 20,
+    "logLevel": "info",
+    "flowchart": {
+      "htmlLabels": true,
+      "curve": "linear"
+    },
+    "sequence": {
+      "mirrorActors": true
+    }
+  }
+}%%
 
+flowchart TD
+    subgraph Client1["CLIENT"]
+        Client["🧑‍💻 React SPA (planned)"]:::foo
+    end
+
+    subgraph APILayer["API Layer"]
+        GW["🌐 API Gateway (planned)"]:::foo
+    end
+
+    subgraph profile-service["SERVICE PROFILE"]
+        Profile["👤 profile-service (Manages user profiles)"]:::microservices
+        DB1@{ shape: cyl, label: "PostgreSQL", stroke: lightgrey}
+        DB1[(PostgreSQL)]:::databases
+    end
+
+    subgraph deck-service["SERVICE DECK"]
+        Deck["🃏 deck-service (Generates matching decks)"]:::microservices
+        DB2[(PostgreSQL)]:::databases
+        Redis["🧠 Redis (Cache)"]
+    end
+
+    subgraph swipe-service["SERVICE SWIPE"]
+        Swipe["💚 swipe-service (Handles swipe actions and matches)"]:::microservices
+        decision@{ shape: diamond, label: "if both swipe" }
+        DB3[(PostgreSQL)]:::databases
+    end
+
+    Auth["🔐 auth-service (planned)"]:::microservices
+    Kafka@{ shape: das, label: "🛰 Kafka (Message Broker)"}
+    Notification["🔔 notification-service (planned)"]:::microservices
+
+    Swipe ==> decision
+    decision ==Publishes match events==> Kafka
+
+    Auth --Generates JWT---> Client
+    Client ==Subsequent requests with Bearer JWT==> GW
+
+    GW ==Handles Login/Register requests==> Auth
+    GW ==> Profile
+    GW ==> Deck
+    GW ==> Swipe
+    DB3 --/GET HTTP---> Deck
+    Profile ~~~ Kafka ~~~ Deck
+    Profile ==Publishes profile data updates===> Kafka
+    Profile ==Stores/Retrieves profile data==> DB1
+    Deck ==Stores deck data==> DB2
+    Deck ==Caches deck data==> Redis
+    Kafka ==Consumes profile data==> Deck
+
+    Swipe ==Stores swipe data==> DB3
+
+    Kafka ==Consumes match events==> Notification
+    Notification ==Sends notifications to Client==> Client
+
+    classDef microservices stroke:#FF0000,
+    classDef databases stroke:#77bba3
+    classDef foo stroke:#bb778f
+```
 
 
 
@@ -79,9 +154,9 @@ Additionally:
 
  - [ ] **Deployment**
 
-    - [ ] Correctly manage URLs in each microservice
+    - [ ] Set up CI/CD pipeline (GitHub Actions)
 
-    - [ ] Pass them via configuration (env vars, config files)
+    - [ ] Configure API Gateway (Traefik) for routing and rate limiting
 
  - [ ] **Notification-service** for mutual likes (via Kafka)
 
