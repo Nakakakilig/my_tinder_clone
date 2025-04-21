@@ -28,5 +28,7 @@ async def stop_kafka_producer() -> None:
 def get_kafka_producer() -> KafkaProducer:
     global kafka_producer  # noqa: PLW0602
     if kafka_producer is None:
-        raise RuntimeError("Kafka producer is not initialized. Call init_kafka_producer() first.")  # noqa: TRY003
+        raise KafkaConnectionError(  # noqa: TRY003
+            "Kafka producer is not initialized. Call init_kafka_producer() first."
+        )
     return kafka_producer
