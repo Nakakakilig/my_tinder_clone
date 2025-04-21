@@ -14,6 +14,7 @@ services:
       pg-profile:
         condition: service_healthy
     networks:
+      - kafka-network
       - profile-network
 
   pg-profile:
@@ -35,4 +36,6 @@ services:
 
 
 networks:
+  kafka-network:
+    external: true
   profile-network:
