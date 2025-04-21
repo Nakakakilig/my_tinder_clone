@@ -1,5 +1,18 @@
 services:
 
+  profile-service:
+    build:
+      context: ..
+      dockerfile: profile-service/Dockerfile
+    environment:
+      APP_ENV: prod
+      APP_CONFIG__DB__URL: ${APP_CONFIG__DB__URL}
+      APP_CONFIG__KAFKA__BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8000:8000"
+    depends_on:
+      pg-profile:
+
   pg-profile:
     image: postgres
     environment:
