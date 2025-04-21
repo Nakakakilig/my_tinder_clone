@@ -14,5 +14,8 @@ RUN uv sync --frozen --no-cache
 
 COPY profile-service .
 
-CMD ["uv", "run", "main.py", "--host", "0.0.0.0", "--port", "8000"]
+RUN chmod +x app/prestart.sh
 
+ENTRYPOINT [ "app/prestart.sh" ]
+
+CMD ["uv", "run", "main.py", "--host", "0.0.0.0", "--port", "8000"]
