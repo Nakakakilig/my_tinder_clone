@@ -22,7 +22,7 @@ def configure_logging():
     console_handler.addFilter(CorrelationIdFilter())
     logger.addHandler(console_handler)
 
-    file_handler = logging.FileHandler("app.log")  # for local development
+    file_handler = logging.FileHandler("logs/app.log")  # for local development
     file_handler.setFormatter(formatter)
     file_handler.addFilter(CorrelationIdFilter())
 

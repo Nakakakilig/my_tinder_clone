@@ -16,6 +16,9 @@ services:
     networks:
       - kafka-network
       - profile-network
+    volumes:
+      - ./app/logs/app.log:/app/app/logs/app.log
+
 
   pg-profile:
     image: postgres
